@@ -9,6 +9,17 @@ public class Reservation {
         this.user = user;
     }
 
+    public String getDay() {
+        return day;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    public User getUser() {
+        return user;
+    }
 
 
 }
