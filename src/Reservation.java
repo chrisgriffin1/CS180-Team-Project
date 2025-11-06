@@ -1,13 +1,13 @@
 public class Reservation {
     private String day;
     private double time;
-    private User user;
+    private Table table;
     private int partySize;
 
     public Reservation (String day, double time, User user, int partySize) {
         this.day = day;
         this.time = time;
-        this.user = user;
+        this.table = table;
         this.partySize = partySize;
     }
 
@@ -19,8 +19,8 @@ public class Reservation {
         return time;
     }
 
-    public User getUser() {
-        return user;
+    public User getTable() {
+        return table;
     }
 
     public int getPartySize() {
