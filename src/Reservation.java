@@ -1,13 +1,15 @@
+import java.util.ArrayList;
+
 public class Reservation {
     private String day;
     private double time;
-    private User user;
-    private int partySize;
+    private Table table;
+    private ArrayList<Integer> partySize;
 
-    public Reservation (String day, double time, User user, int partySize) {
+    public Reservation (String day, double time, User user, ArrayList<Integer> partySize, Table table) {
         this.day = day;
         this.time = time;
-        this.user = user;
+        this.table = table;
         this.partySize = partySize;
     }
 
@@ -19,8 +21,8 @@ public class Reservation {
         return time;
     }
 
-    public User getUser() {
-        return user;
+    public User getTable() {
+        return table;
     }
 
     public int getPartySize() {
