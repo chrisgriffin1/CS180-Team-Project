@@ -9,4 +9,11 @@ public class Restaurant {
         this.Reservation = reservation;
         this.capacity = capacity;
     }
+
+    public int getCapacity() { 
+        return capacity; 
+    }
+
+    
+
 }
