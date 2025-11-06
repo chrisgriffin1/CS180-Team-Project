@@ -1,4 +1,9 @@
 import java.io.*;
+
+// TODO: need to make it thread safe
+
+
+
 public class Database {
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
@@ -13,7 +18,7 @@ public class Database {
     public User[] readUsers() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
             return (User[]) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return new User[0];
