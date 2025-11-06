@@ -4,7 +4,7 @@ public class Reservation {
     private Table table;
     private int partySize;
 
-    public Reservation (String day, double time, User user, int partySize) {
+    public Reservation (String day, double time, User user, int partySize, Table table) {
         this.day = day;
         this.time = time;
         this.table = table;
