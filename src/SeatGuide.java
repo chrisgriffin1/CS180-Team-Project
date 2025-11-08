@@ -3,4 +3,5 @@ public interface SeatGuide {
     public void setUser(User user);
     public boolean getIsOccupied();
     public void occupy();
+    public void free();
 }
