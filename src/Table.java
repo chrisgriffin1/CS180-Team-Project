@@ -27,7 +27,7 @@ public class Table {
         return price;
     }
 
-    public void occupyTable(Table table) {
+    public void occupySeats(Seat seat) {
         for (int a = 0; a < seats.length; a++) {
             seats[a] = seat;
         }

@@ -22,10 +22,4 @@ public class Seat {
     public void occupy() {
         isOccupied = true;
     }
-
-    public void occupySeat(Seat seat) {
-        for (int a = 0; a < seats.length; a++) {
-            seats[a] = seat;
-        }
-    }
 }

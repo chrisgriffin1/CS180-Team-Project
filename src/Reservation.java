@@ -29,5 +29,10 @@ public class Reservation {
         return partySize;
     }
 
+    public void occupyTable(Table table) {
+        for (int a = 0; a < seats.length; a++) {
+            seats[a] = seat;
+        }
+    }
 
 }
