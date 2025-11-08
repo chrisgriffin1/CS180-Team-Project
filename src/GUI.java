@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.*;
 import java.awt.*;
 
+// Phase Two 
+
 public class GUI {
 
     JFrame frame = new JFrame();
