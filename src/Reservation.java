@@ -5,12 +5,14 @@ public class Reservation {
     private double time;
     private Table table;
     private int partySize;
+    private User user
 
     public Reservation (String day, double time, User user, int partySize, Table table) {
         this.day = day;
         this.time = time;
         this.table = table;
         this.partySize = partySize;
+        this.user = user;
     }
 
     public String getDay() {
@@ -19,6 +21,9 @@ public class Reservation {
 
     public double getTime() {
         return time;
+    }
+    public User getUser() {
+        return user;
     }
 
     public Table getTable() {
