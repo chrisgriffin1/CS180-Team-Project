@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Restaurant {
+public class Restaurant implements RestaurantGuide {
     private Reservation reservation;
     private int capacity;
     private Table[][] seatingPlan;
