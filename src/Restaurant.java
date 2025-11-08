@@ -20,7 +20,17 @@ public class Restaurant {
         return seatingPlan;
     }
 
-    
+    /**
+     * occupy 2D array with the reservation 
+     */
+    public void occupyReservation() {
+        int row = table.getTableRow();
+        int column = table.getTableColumn();
+
+        Table selected = seatingPlan[row][column];    
+        selected.occupySeat();
+    }
+
     public void removeReservation(Table reservation) {
         
 

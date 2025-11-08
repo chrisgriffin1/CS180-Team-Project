@@ -29,17 +29,5 @@ public class Reservation {
         return partySize;
     }
 
-    /**
-     * occupy 2D array with the reservation 
-     */
-    public void occupyReservation(Table reservation) {
-        for (int i = 0; i < seatingPlan.length; i++) {
-            for (int j = 0; j < seatingPlan[i].length; j++) {
-                if () {
-                reservation = seatingPlan[i][j];
-                }
-            }
-        }
-    }
 
 }
