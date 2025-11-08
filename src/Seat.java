@@ -1,4 +1,4 @@
-public class Seat {
+public class Seat implements SeatGuide {
     private User user;
     private boolean isOccupied;
 

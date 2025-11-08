@@ -26,11 +26,12 @@ public class Table {
     public int getPrice() {
         return price;
     }
-
+    
+    /*
     public void occupySeats(Seat seat) {
         for (int a = 0; a < seats.length; a++) {
             seats[a] = seat;
         }
     }
-
+    */
 }
