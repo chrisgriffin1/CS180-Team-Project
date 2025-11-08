@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Reservation {
+public class Reservation implements ReservationGuide {
     private String day;
     private double time;
     private Table table;
