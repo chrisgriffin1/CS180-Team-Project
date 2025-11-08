@@ -18,9 +18,9 @@ public class Database {
 
     }
 
-    public void createReservation () {
-        
-
+    public void createReservation (String day, double time, User user, int partySize, Table table) {
+        Reservation reservation = new Reservation(day, time, user, partySize, table);
+        reservation.occupyReservation(table);
     }
 
     public void deleteReservation () {

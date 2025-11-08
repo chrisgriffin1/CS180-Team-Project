@@ -31,5 +31,9 @@ public class Restaurant {
         }
     }
     
+    public void removeReservation(Table reservation) {
+        
+
+    }
 
 }
