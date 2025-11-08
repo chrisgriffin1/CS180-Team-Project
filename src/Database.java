@@ -9,6 +9,26 @@ public class Database {
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
 
+    public void makeNewUser() {
+
+    }
+
+    public void deleteUser() {
+
+
+    }
+
+    public void createReservation () {
+
+
+    }
+
+    public void deleteReservation () {
+
+        
+    }
+
+
     public void saveUsers(User[] users) {
         synchronized (lock) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
@@ -48,5 +68,5 @@ public class Database {
             return new Reservation[0];
         } 
     }
-    
+
 }    
