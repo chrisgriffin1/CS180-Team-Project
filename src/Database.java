@@ -12,6 +12,11 @@ public class Database {
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
 
+    public Database() {
+        users = readUsers();
+        reservations = readReservations();
+    }
+
     public void makeNewUser(String username, String password) {
         User newUser = new User(username, password);
         users.add(newUser);
