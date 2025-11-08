@@ -5,6 +5,7 @@ import java.io.*;
 
 
 public class Database {
+    public static Object lock = new Object();
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
 
