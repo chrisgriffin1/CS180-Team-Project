@@ -41,8 +41,14 @@ public class Restaurant {
     }
 
     public void removeReservation(Table reservation) {
-        
-
+        int row = reservation.getTableRow();
+        int column = reservation.getTableColumn();
+        Table selected = seatingPlan[row][column]; 
+        Seat[] seats = selected.getSeats();
+        for (Seat seat : seats) {
+            seat.setUser(null);
+            seat.free();   
+        }
     }
 
 }
