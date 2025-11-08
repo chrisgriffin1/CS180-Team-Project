@@ -1,5 +1,5 @@
 import java.io.*;
-
+import java.util.ArrayList;
 // TODO: need to make it thread safe
 
 
@@ -9,8 +9,17 @@ public class Database {
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
 
-    public void makeNewUser() {
+    ArrayList<User> users;
+    ArrayList<Reservation> reservations;
 
+    public void makeNewUser(String username, String password) {
+        User newUser = new User(username, password);
+        users.add(newUser);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
+            oos.writeObject(users);
+        }   catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteUser() {
@@ -25,11 +34,11 @@ public class Database {
 
     public void deleteReservation () {
 
-
+        
     }
 
 
-    public void saveUsers(User[] users) {
+    public void saveUsers(ArrayList<User> users) {
         synchronized (lock) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
                 oos.writeObject(users);
@@ -41,15 +50,15 @@ public class Database {
     public User[] readUsers() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
-                return (User[]) ois.readObject();
+                return (ArrayList<User>) ois.readObject();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new User[0];
+            return new ArrayList<>();
         }
     }
-
-    public void saveReservations(Reservation[] reservations) {
+    
+    public void saveReservations(ArrayList<Reservation> reservations) {
         synchronized (lock) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
                 oos.writeObject(reservations);
@@ -58,15 +67,15 @@ public class Database {
             }
         }
     }
-    public Reservation[] readReservations() {
+    public ArrayList<Reservation> readReservations() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(reservationsFile))) {
-                return (Reservation[]) ois.readObject();
+                return (ArrayList<Reservation>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            return new Reservation[0];
-        } 
+            return new ArrayList<>();
+        }
     }
 
 }    
