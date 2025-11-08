@@ -12,6 +12,11 @@ public class Database {
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
 
+    public Database() {
+        users = readUsers();
+        reservations = readReservations();
+    }
+
     public void makeNewUser(String username, String password) {
         User newUser = new User(username, password);
         users.add(newUser);
@@ -22,9 +27,18 @@ public class Database {
         }
     }
 
-    public void deleteUser() {
-
-
+    public void deleteUser(String username) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                users.remove(i);
+                break;
+            }
+        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
+            oos.writeObject(users);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }   
     }
 
     public void createReservation (String day, double time, User user, int partySize, Table table) {
@@ -32,9 +46,13 @@ public class Database {
         reservation.occupyReservation(table);
     }
 
-    public void deleteReservation () {
-
-        
+    public void deleteReservation (Reservation reservation) {
+        reservations.remove(reservation);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
+            oos.writeObject(reservations);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
