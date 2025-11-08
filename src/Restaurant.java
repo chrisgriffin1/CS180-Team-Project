@@ -40,7 +40,7 @@ public class Restaurant implements RestaurantGuide {
         
     }
 
-    public void removeReservation(Table reservation) {
+    public void removeReservation(Reservation reservation) {
         int row = reservation.getTableRow();
         int column = reservation.getTableColumn();
         Table selected = seatingPlan[row][column]; 
