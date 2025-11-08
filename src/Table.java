@@ -1,11 +1,11 @@
 public class Table {
     private int tableNumber;
-    private User[] peopleSittingHere;
+    private Seat[] seats;
     private int price;
 
     public Table(int tableNumber, int capacity, int price) {
         this.tableNumber = tableNumber;
-        this.peopleSittingHere = new User[capacity];
+        this.seats = new Seat[capacity];
         this.price = price;
     }
     
@@ -13,8 +13,8 @@ public class Table {
         return tableNumber;
     }
 
-    public User[] getPeopleSittingHere() {
-        return peopleSittingHere;
+    public Seat[] getSeats() {
+        return seats;
     }
 
     public int getPrice() {
