@@ -21,6 +21,7 @@ public class Table {
         return price;
     }
 
+    public void occupyTable()
     
 
 }
