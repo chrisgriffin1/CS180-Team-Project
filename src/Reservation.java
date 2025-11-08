@@ -4,9 +4,9 @@ public class Reservation {
     private String day;
     private double time;
     private Table table;
-    private ArrayList<Integer> partySize;
+    private int partySize;
 
-    public Reservation (String day, double time, User user, ArrayList<Integer> partySize, Table table) {
+    public Reservation (String day, double time, User user, int partySize, Table table) {
         this.day = day;
         this.time = time;
         this.table = table;
