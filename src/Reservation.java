@@ -34,10 +34,13 @@ public class Reservation {
         return partySize;
     }
 
-    public void occupyTable(Table table) {
-        for (int a = 0; a < seats.length; a++) {
-            seats[a] = seat;
+    public boolean isTableOccupied(Table table) {
+        for (int a = 0; a < table.getSeats().length; a++) {
+            if ((table.getSeats()[a].getIsOccupied()) == true) {
+                return true;
+            } 
         }
+        return false;
     }
 
 }

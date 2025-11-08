@@ -26,13 +26,15 @@ public class Restaurant {
     public void occupyReservation(Reservation r) {
         int row = r.getTable().getTableRow();
         int column = r.getTable().getTableColumn();
-
-        Table selected = seatingPlan[row][column];    
-
-        Seat[] seats = selected.getSeats();
-        for (Seat seat : seats) {
-            seat.setUser(r.getUser());
-            seat.occupy();
+        
+        // check if table is occupied, otherwise fill the table
+        if (!(r.isTableOccupied(r.getTable()))) {
+            Table selected = seatingPlan[row][column]; 
+            Seat[] seats = selected.getSeats();
+            for (Seat seat : seats) {
+                seat.setUser(r.getUser());
+                seat.occupy();   
+            }    
         }
 
         
