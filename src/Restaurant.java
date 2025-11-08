@@ -28,7 +28,7 @@ public class Restaurant {
         int column = table.getTableColumn();
 
         Table selected = seatingPlan[row][column];    
-        selected.occupySeat();
+        selected.occupyTable();
     }
 
     public void removeReservation(Table reservation) {

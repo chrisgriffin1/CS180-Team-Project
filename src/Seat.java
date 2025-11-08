@@ -11,6 +11,10 @@ public class Seat {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public boolean getIsOccupied() {
         return isOccupied;
     }
