@@ -1,4 +1,4 @@
-public class Table {
+public class Table implements TableGuide {
     private int tableRow;
     private int tableColumn;
     private Seat[] seats;
@@ -26,7 +26,7 @@ public class Table {
     public int getPrice() {
         return price;
     }
-    
+
     /*
     public void occupySeats(Seat seat) {
         for (int a = 0; a < seats.length; a++) {

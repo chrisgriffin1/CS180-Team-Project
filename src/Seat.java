@@ -22,4 +22,8 @@ public class Seat implements SeatGuide {
     public void occupy() {
         isOccupied = true;
     }
+
+    public void free() {
+        isOccupied = false;
+    }
 }
