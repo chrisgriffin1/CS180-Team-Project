@@ -43,12 +43,16 @@ public class Restaurant implements RestaurantGuide {
     public void removeReservation(Reservation reservation) {
         int row = reservation.getTable().getTableRow();
         int column = reservation.getTable().getTableColumn();
-        Table selected = seatingPlan[row][column]; 
-        Seat[] seats = selected.getSeats();
-        for (Seat seat : seats) {
-            seat.setUser(null);
-            seat.free();   
-        }
+
+        if ((r.isTableOccupied(r.getTable()))) {
+            Table selected = seatingPlan[row][column]; 
+            
+            Seat[] seats = selected.getSeats();
+            for (Seat seat : seats) {
+                seat.setUser(null);
+                seat.free();   
+            }
+        }    
     }
 
 }
