@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Restaurant implements RestaurantGuide {
     private Reservation reservation;
     private int capacity;
@@ -7,7 +5,7 @@ public class Restaurant implements RestaurantGuide {
 
 
     public Restaurant (Reservation reservation, int capacity, Table[][] seatingPlan) {
-        this.Reservation = reservation;
+        this.reservation = reservation;
         this.capacity = capacity;
         this.seatingPlan = seatingPlan;
     }
@@ -40,9 +38,9 @@ public class Restaurant implements RestaurantGuide {
         
     }
 
-    public void removeReservation(Reservation reservation) {
-        int row = reservation.getTable().getTableRow();
-        int column = reservation.getTable().getTableColumn();
+    public void removeReservation(Reservation r) {
+        int row = r.getTable().getTableRow();
+        int column = r.getTable().getTableColumn();
 
         if ((r.isTableOccupied(r.getTable()))) {
             Table selected = seatingPlan[row][column]; 

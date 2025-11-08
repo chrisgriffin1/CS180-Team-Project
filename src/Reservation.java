@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-
 public class Reservation implements ReservationGuide {
     private String day;
     private double time;
     private Table table;
     private int partySize;
-    private User user
+    private User user;
 
     public Reservation (String day, double time, User user, int partySize, Table table) {
         this.day = day;

@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 
-// TODO: need to make it thread safe
-
 public class Database implements IDatabase {
 
     public static Object lock = new Object();
