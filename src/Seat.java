@@ -2,7 +2,7 @@ public class Seat {
     private User user;
     private boolean isOccupied;
 
-    public Seat() {
+    public Seat(User user) {
         this.user = user;
         this.isOccupied = false;
     }

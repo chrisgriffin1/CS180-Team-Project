@@ -21,7 +21,7 @@ public class Reservation {
         return time;
     }
 
-    public User getTable() {
+    public Table getTable() {
         return table;
     }
 
@@ -35,10 +35,11 @@ public class Reservation {
     public void occupyReservation(Table reservation) {
         for (int i = 0; i < seatingPlan.length; i++) {
             for (int j = 0; j < seatingPlan[i].length; j++) {
-                seatingPlan[i][j] = reservation;
+                if () {
+                reservation = seatingPlan[i][j];
+                }
             }
         }
     }
 
-    
 }

@@ -1,16 +1,22 @@
 public class Table {
-    private int tableNumber;
+    private int tableRow;
+    private int tableColumn;
     private Seat[] seats;
     private int price;
 
-    public Table(int tableNumber, int capacity, int price) {
-        this.tableNumber = tableNumber;
+    public Table(int tableRow, int tableColumn, int capacity, int price) {
+        this.tableRow = tableRow;
+        this.tableColumn = tableColumn;
         this.seats = new Seat[capacity];
         this.price = price;
     }
     
-    public int getTableNumber() {
-        return tableNumber;
+    public int getTableRow() {
+        return tableRow;
+    }
+
+    public int getTableColumn() {
+        return tableColumn;
     }
 
     public Seat[] getSeats() {
