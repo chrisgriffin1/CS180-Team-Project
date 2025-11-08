@@ -47,7 +47,7 @@ public class Database {
             }
         }
     }
-    public User[] readUsers() {
+    public ArrayList<User> readUsers() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
                 return (ArrayList<User>) ois.readObject();
