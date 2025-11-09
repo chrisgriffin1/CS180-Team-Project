@@ -17,7 +17,7 @@ public class UserTest {
         User user = new User("", "");
 
         assertNotNull(user);
-        assertNull("Username should not be an empty string", "", user.getUsername());
+        assertNull("Username should not be an empty string", "", user.getUserName());
         assertNull("Password should not be an empty string", "", user.getPassword());
     }
 
