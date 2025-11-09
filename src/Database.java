@@ -93,7 +93,7 @@ public class Database implements IDatabase {
             e.printStackTrace();
         }
     }
-            
+
     public void readUsers() {
         if (!usersFile.exists()) {
             return;
@@ -127,8 +127,7 @@ public class Database implements IDatabase {
             return reservations;
         }
     }
-
-}    
+   
     public User[] getLastReadUsers() {
         return lastReadUsers;
     }
