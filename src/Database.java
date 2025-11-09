@@ -6,6 +6,7 @@ public class Database implements IDatabase {
     public static Object lock = new Object();
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
+    private User[] lastReadUsers;
 
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
@@ -89,6 +90,13 @@ public class Database implements IDatabase {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
             oos.writeObject(this.reservations);
         } catch (IOException e) {
+    public void readUsers() {
+        if (!usersFile.exists()) {
+            return;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
+            User[] users = (User[]) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -117,3 +125,7 @@ public class Database implements IDatabase {
     }
 
 }    
+    public User[] getLastReadUsers() {
+        return lastReadUsers;
+    }
+}

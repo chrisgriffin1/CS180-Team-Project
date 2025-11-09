@@ -1,19 +1,23 @@
-import java.io.*;
+import java.io.Serializable;
 
-public class User implements Serializable, UserGuide {
-    private String username;
+public class User implements Serializable {
+
+    private String userName;
     private String password;
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String userName, String password) {
+        if (userName == null || password == null) {
+            throw new IllegalArgumentException("Username and password cannot be null.");
+        }
+        this.userName = userName;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
-    
+
     public String getPassword() {
         return password;
     }
-}   
+}

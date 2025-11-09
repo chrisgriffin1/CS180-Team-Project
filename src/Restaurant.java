@@ -1,56 +1,34 @@
-public class Restaurant implements RestaurantGuide {
-    private Reservation reservation;
-    private int capacity;
-    private Table[][] seatingPlan;
+import java.util.ArrayList;
 
+public class Restaurant {
+    private String day;
+    private double time;
+    private User user;
+    private int partySize;
 
-    public Restaurant (Reservation reservation, int capacity, Table[][] seatingPlan) {
-        this.reservation = reservation;
-        this.capacity = capacity;
-        this.seatingPlan = seatingPlan;
-    }
-
-    public int getCapacity() { 
-        return capacity; 
-    }
-
-    public Table[][] getSeatingPlan() {
-        return seatingPlan;
-    }
-
-    /**
-     * occupy 2D array with the reservation 
-     */
-    public void occupyReservation(Reservation r) {
-        int row = r.getTable().getTableRow();
-        int column = r.getTable().getTableColumn();
-        
-        // check if table is occupied, otherwise fill the table
-        if (!(r.isTableOccupied(r.getTable()))) {
-            Table selected = seatingPlan[row][column]; 
-            Seat[] seats = selected.getSeats();
-            for (Seat seat : seats) {
-                seat.setUser(r.getUser());
-                seat.occupy();   
-            }    
+    public Restaurant (String day, double time, User user, int partySize) {
+        If (day == null || user == null || partySize <= 0) {
+            throw new IllegalArgumentException("Invalid arguments for Restaurant constructor");
         }
-
-        
+        this.day = day;
+        this.time = time;
+        this.user = user;
+        this.partySize = partySize;
     }
 
-    public void removeReservation(Reservation r) {
-        int row = r.getTable().getTableRow();
-        int column = r.getTable().getTableColumn();
-
-        if ((r.isTableOccupied(r.getTable()))) {
-            Table selected = seatingPlan[row][column]; 
-            
-            Seat[] seats = selected.getSeats();
-            for (Seat seat : seats) {
-                seat.setUser(null);
-                seat.free();   
-            }
-        }    
+    public String getDay() {
+        return day;
     }
 
+    public double getTime() {
+        return time;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public int getPartySize() {
+        return partySize;
+    }
 }
