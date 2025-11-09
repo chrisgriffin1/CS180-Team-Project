@@ -90,6 +90,10 @@ public class Database implements IDatabase {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
             oos.writeObject(this.reservations);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+            
     public void readUsers() {
         if (!usersFile.exists()) {
             return;
