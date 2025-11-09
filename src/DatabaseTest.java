@@ -29,10 +29,10 @@ public class DatabaseTest {
         assertNotNull("Users read from database should not be null", usersRead);
         assertEquals("Number of users read should match number saved", usersToSave.length, usersRead.length);
 
-        assertEquals("First user's username should match", usersToSave[0].getUsername(), usersRead[0].getUsername());
+        assertEquals("First user's username should match", usersToSave[0].getUserName(), usersRead[0].getUserName());
         assertEquals("First user's password should match", usersToSave[0].getPassword(), usersRead[0].getPassword());
 
-        assertEquals("Second user's username should match", usersToSave[1].getUsername(), usersRead[1].getUsername());
+        assertEquals("Second user's username should match", usersToSave[1].getUserName(), usersRead[1].getUserName());
         assertEquals("Second user's password should match", usersToSave[1].getPassword(), usersRead[1].getPassword());
     }
 
