@@ -33,7 +33,7 @@ public class Database implements IDatabase {
     public void deleteUser(String username) {
         synchronized (lock) {
             for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getUsername().equals(username)) {
+                if (users.get(i).getUserName().equals(username)) {
                     users.remove(i);
                     break;
                 }
