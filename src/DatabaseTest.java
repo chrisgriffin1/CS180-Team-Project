@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;    
 import org.junit.After;
 import java.io.File;
+import java.util.ArrayList;
 
 public class DatabaseTest {
     @org.junit.After
@@ -24,7 +25,7 @@ public class DatabaseTest {
         db.saveUsers();
         db.readUsers();
 
-        User[] usersRead = db.getLastReadUsers();
+        ArrayList<User> usersRead = db.getUsers();
 
         assertNotNull("Users read from database should not be null", usersRead);
         assertEquals("Number of users read should match number saved", usersToSave.length, usersRead.length);
