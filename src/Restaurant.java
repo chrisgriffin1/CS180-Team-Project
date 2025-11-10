@@ -1,3 +1,9 @@
+/**
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
+
 public class Restaurant {
     private String day;
     private double time;
@@ -14,18 +20,22 @@ public class Restaurant {
         this.partySize = partySize;
     }
 
+    //getter method which gets day
     public String getDay() {
         return day;
     }
 
+    //getter method which gets time
     public double getTime() {
         return time;
     }
 
+    //getter method which gets user
     public User getUser() {
         return user;
     }
 
+    //getter method which gets party size
     public int getPartySize() {
         return partySize;
     }

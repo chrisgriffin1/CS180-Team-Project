@@ -1,6 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
 public class Database implements IDatabase {
 
     public static Object lock = new Object();
@@ -16,6 +21,7 @@ public class Database implements IDatabase {
         reservations = readReservations();
     }
 
+    //method creates a new User object given a username and password as input, and adds the new user object to an ArrayList of type User
     public void makeNewUser(String username, String password) {
         synchronized (lock) {
             User newUser = new User(username, password);
@@ -30,6 +36,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method gets a User object given a username as input from the users ArrayList and removes it from the users ArrayList.
     public void deleteUser(String username) {
         synchronized (lock) {
             for (int i = 0; i < users.size(); i++) {
@@ -49,6 +56,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method which creates 
     public void createReservation (String day, double time, User user, int partySize, Table table) {
         synchronized (lock) {
             Reservation reservation = new Reservation(day, time, user, partySize, table);

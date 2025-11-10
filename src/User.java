@@ -1,6 +1,10 @@
 import java.io.Serializable;
+/**
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
 
-public class User implements Serializable {
+ public class User implements Serializable {
 
     private String userName;
     private String password;
