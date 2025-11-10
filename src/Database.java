@@ -6,7 +6,7 @@ public class Database implements IDatabase {
     public static Object lock = new Object();
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
-    private User[] lastReadUsers;
+
 
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
@@ -118,7 +118,5 @@ public class Database implements IDatabase {
         }
     }
    
-    public User[] getLastReadUsers() {
-        return lastReadUsers;
-    }
+
 }
