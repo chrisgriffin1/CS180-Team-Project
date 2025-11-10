@@ -75,7 +75,9 @@ public class Database implements IDatabase {
         
     }
 
-
+    /**
+     * saves users to file
+     */
     public void saveUsers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
             oos.writeObject(this.users);
@@ -83,7 +85,9 @@ public class Database implements IDatabase {
             e.printStackTrace();
         }
     }
-    
+    /**
+     * Reads users from file
+     */
     public ArrayList<User> readUsers() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
@@ -94,7 +98,10 @@ public class Database implements IDatabase {
             return new ArrayList<User>();
         }
     }
-    
+
+    /**
+     * saves reservations to file
+     */
     public void saveReservations() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
             oos.writeObject(this.reservations);
@@ -103,7 +110,9 @@ public class Database implements IDatabase {
         }
     }
 
-
+    /**
+     * Reads reservations from file
+     */
     public ArrayList<Reservation> readReservations() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(reservationsFile))) {
@@ -114,13 +123,18 @@ public class Database implements IDatabase {
             return new ArrayList<>();
         }
     }
-
+    /**
+     * Gets users
+     */
     public ArrayList<User> getUsers() {
         synchronized (lock) {
             return users;
         }
     }
 
+    /**
+     * Gets reservations
+     */
     public ArrayList<Reservation> getReservations() {
         synchronized (lock) {
             return reservations;
