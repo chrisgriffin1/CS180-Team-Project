@@ -6,6 +6,17 @@ public class Reservation implements ReservationGuide {
     private User user;
 
     public Reservation (String day, double time, User user, int partySize, Table table) {
+        if (user == null) {
+            throw new IllegalArgumentException("user cannot be null");
+        }
+        if (day == null) {
+            throw new IllegalArgumentException("day cannot be null");
+        }
+       
+        if (partySize == 0) {
+            throw new IllegalArgumentException("partySize cannot be zero");
+        }
+
         this.day = day;
         this.time = time;
         this.table = table;
