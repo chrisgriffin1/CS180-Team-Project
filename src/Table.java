@@ -13,19 +13,22 @@ public class Table implements TableGuide {
         this.seats = new Seat[capacity];
         this.price = price; 
     }
-    
+    // Gets table row
     public int getTableRow() {
         return tableRow;
     }
 
+    // Gets table column
     public int getTableColumn() {
         return tableColumn;
     }
 
+    // Gets seats
     public Seat[] getSeats() {
         return seats;
     }
 
+    // Gets price
     public int getPrice() {
         return price;
     }

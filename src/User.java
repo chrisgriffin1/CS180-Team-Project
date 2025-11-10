@@ -12,11 +12,11 @@ public class User implements Serializable {
         this.userName = userName;
         this.password = password;
     }
-
+    // Gets username
     public String getUserName() {
         return userName;
     }
-
+    // Gets password
     public String getPassword() {
         return password;
     }
