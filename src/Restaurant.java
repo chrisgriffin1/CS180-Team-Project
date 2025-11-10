@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Restaurant {
     private String day;
     private double time;
