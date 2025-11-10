@@ -94,16 +94,6 @@ public class Database implements IDatabase {
         }
     }
 
-    public void readUsers() {
-        if (!usersFile.exists()) {
-            return;
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
-            User[] users = (User[]) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     public ArrayList<Reservation> readReservations() {
         synchronized (lock) {

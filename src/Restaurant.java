@@ -7,7 +7,7 @@ public class Restaurant {
     private int partySize;
 
     public Restaurant (String day, double time, User user, int partySize) {
-        If (day == null || user == null || partySize <= 0) {
+        if (day == null || user == null || partySize <= 0) {
             throw new IllegalArgumentException("Invalid arguments for Restaurant constructor");
         }
         this.day = day;

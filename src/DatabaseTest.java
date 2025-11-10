@@ -18,10 +18,10 @@ public class DatabaseTest {
     public void testSaveAndReadUsers() {
         Database db = new Database();
         User[] usersToSave = new User[2];
-        usersToSave[0] = new User("john", "password123");
-        usersToSave[1] = new User("jane", "secure456");
+        db.makeNewUser("john", "password123");
+        db.makeNewUser("jane", "secure456");
 
-        db.saveUsers(usersToSave);
+        db.saveUsers();
         db.readUsers();
 
         User[] usersRead = db.getLastReadUsers();
