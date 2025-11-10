@@ -45,6 +45,6 @@ public class DatabaseTest {
             testFile.delete();
         }
         db.readUsers();
-        assertNull("No users should be read when file is missing", db.readUsers());
+        assertEquals("No users should be read when file is missing", db.readUsers().size() == 0);
     }
 }
