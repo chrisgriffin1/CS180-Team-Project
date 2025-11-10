@@ -26,7 +26,7 @@ public class UserTest {
         User nullUser = new User(null, null);
 
         assertNotNull(nullUser);
-        assertNull("Username should not be null", user.getUserName());
-        assertNull("Password should not be null", user.getPassword());
+        assertNull("Username should not be null", nullUser.getUserName());
+        assertNull("Password should not be null", nullUser.getPassword());
     }
 }
