@@ -6,7 +6,7 @@ public class ReservationTest {
     @Test(timeout = 1000)
     public void testReservationConstructorAndGetters() {
         User testUser = new User("testUser", "password123");
-        Table newTable1 = new Table(4, 4, 4, 4);
+        Table newTable1 = new Table(4, 4, 1, 4);
         Reservation reservation = new Reservation("Friday", 19.30, testUser, 4, newTable1);
 
         assertNotNull("Reservation object should not be null", reservation);
