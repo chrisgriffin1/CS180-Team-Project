@@ -79,10 +79,12 @@ public class Database implements DatabaseGuide {
      * saves users to file
      */
     public void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
-            oos.writeObject(this.users);
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (lock) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
+                oos.writeObject(this.users);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     /**
@@ -103,10 +105,12 @@ public class Database implements DatabaseGuide {
      * saves reservations to file
      */
     public void saveReservations() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
-            oos.writeObject(this.reservations);
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (lock) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
+                oos.writeObject(this.reservations);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

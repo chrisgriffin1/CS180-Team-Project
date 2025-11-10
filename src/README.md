@@ -32,20 +32,20 @@ java -cp ".;lib\*" org.junit.runner.JUnitCore DatabaseTest TableTest
 ### User.java
 
 #### Functionality
-This class is a datamodel that stores information for a single user account. It contains a `username` and `password`, which are set in the constructor. The constructor includes validation to throw an `IllegalArgumentException` if either the `userName` or `password` is `null`.
+Stores user account information including username and password. The constructor validates inputs and throws an `IllegalArgumentException` if either field is `null`.
 
 #### Testing
 See `UserTest.java`.
 
 #### Relationships
-The class implements the `IUser` interface. It also implements `java.io.Serializable` so that `User` objects can be saved to a file by the `Database` class. `User` objects are stored in an `ArrayList` within the `Database` class and are also part of a `Reservation` object.
+Implements `IUser` interface and `java.io.Serializable` for file persistence. Stored in an `ArrayList` within `Database` and used in `Reservation` objects.
 
 ---
 
 ### IUser.java
 
 #### Functionality
-This is the interface for the `User` class. It ensures that any `User` object will have public methods for `getUsername()` and `getPassword()`.
+Interface for the `User` class. Requires `getUsername()` and `getPassword()` methods.
 
 #### Testing
 No testing
@@ -58,208 +58,259 @@ Implemented by `User` class.
 ### UserTest.java
 
 #### Functionality 
-This class contains the comprehensive JUnit test case for the `User` class.
+JUnit tests for the `User` class.
 
 #### Testing
-The tests are designed to be comprehensive and cover all required scenarios:
+Covers the main scenarios:
 
 1. **`testUserConstructorAndGetters`**  
-   This is the "happy path" test, which verifies that a `User` object created with valid strings correctly stores and returns those strings via its getter methods.
+   Happy path test - checks that valid strings are stored and returned through getters.
 
 2. **`testUserWithNullValues`**  
-   This is the "error case" test. It confirms that the `User` constructor correctly throws an `IllegalArgumentException` when `null` values are passed in.
+   Error case - ensures the constructor throws an `IllegalArgumentException` for `null` values.
 
 3. **`testUserEmptyConstructor`**  
-   This is an "edge case" test. It validates that the constructor correctly accepts empty strings (`""`) without throwing an error.
+   Edge case - makes sure empty strings (`""`) are accepted without errors.
 
 #### Relationships
-This class directly tests the `User` class.
+Tests the `User` class.
 
 ---
 
 ### Seat.java
 
 #### Functionality
-This class models a seat by storing the User who reserved it and an `isOccupied` boolean. The constructor sets the initial User and defaults it to false. It includes methods to get/set the user, check occupancy, and manually `occupy()` or `free()` the seat. 
+Represents a seat with a `User` and `isOccupied` status. Constructor sets the initial user and defaults to unoccupied. Includes methods to get/set the user and manually `occupy()` or `free()` the seat. 
 
 #### Testing
 See `SeatTest.java`.
 
 #### Relationships
-The class implements the `SeatGuide` interface. It also implements `java.io.Serializable` so that `Seat` objects can be saved as part of the `Table` object. `Seat` objects are stored in an array within the `Table` class. 
+Implements `SeatGuide` interface and `java.io.Serializable`. Stored in arrays within `Table` objects. 
 
 ---
 
 ### SeatGuide.java
 
 #### Functionality 
-This is the interface for the `Seat` class. It ensures that any `Seat` object will have public methods for `getUser()`, `setUser()`, `getIsOccupied()`, `occupy()`, and `free()`.
+Interface for the `Seat` class. Requires `getUser()`, `setUser()`, `getIsOccupied()`, `occupy()`, and `free()` methods.
 
 #### Testing
 No testing
 
 #### Relationships
-Interface implemented by the `Seat` class. 
+Implemented by the `Seat` class. 
 
 ---
 
 ### SeatTest.java
 
 #### Functionality 
-This class contains the comprehensive JUnit test case for the `Seat` class.
+JUnit tests for the `Seat` class.
 
 #### Testing
-The tests are designed to be comprehensive and cover the class's full functionality:
+Covers the main functionality:
 
 1. **`testSeatConstructorAndGetters`**  
-   This test verifies that a `Seat` object is correctly constructed, that it returns the correct `User`, and that its default `isOccupied` state is `false`.
+   Checks that a `Seat` is constructed properly, returns the right `User`, and defaults to `isOccupied = false`.
 
 2. **`testOccupyAndFree`**  
-   This test checks the state-changing methods. It confirms that `occupy()` correctly sets the `isOccupied` flag to `true` and that `free()` correctly resets it to `false`.
+   Tests state changes - `occupy()` sets the flag to `true` and `free()` resets it to `false`.
 
 3. **`testSetUser`**  
-   This test validates that the `setUser()` method correctly updates the `User` object associated with the seat.
+   Makes sure `setUser()` updates the associated `User` object.
 
 #### Relationships
-This class tests the `Seat` class. 
+Tests the `Seat` class. 
 
 ---
 
 ### Table.java
 
 #### Functionality
-This class is a data model that represents a single table. It stores its location, price, and an array of `Seat` objects. The constructor validates the capacity (0-2) and initializes the `Seat` array, filling it with new `Seat` objects. 
+Represents a table with location, price, and an array of `Seat` objects. The constructor validates capacity (must be 0-2) and initializes the seat array. 
 
 #### Testing 
 See `TableTest.java`
 
 #### Relationships
-The class implements the `TableGuide` interface and `java.io.Serializable`. Table objects are contained within `Reservation` objects, and in turn, contain an array of `Seat` objects.
+Implements `TableGuide` interface and `java.io.Serializable`. Contains an array of `Seat` objects and is used in `Reservation` objects.
 
 ---
 
 ### TableGuide.java
 
 #### Functionality
-This is the interface for the `Table` class. It ensures that any `Table` object will have public methods for `getTableRow()`, `getTableColumn()`, `getSeats()`, and `getPrice()`.
+Interface for the `Table` class. Requires `getTableRow()`, `getTableColumn()`, `getSeats()`, and `getPrice()` methods.
 
 #### Testing
 No testing
 
 #### Relationships
-Interface implemented by the `Table` class. 
+Implemented by the `Table` class. 
 
 ---
 
 ### TableTest.java
 
 #### Functionality
-Contains the comprehensive JUnit test case for the `Table` class.
+JUnit tests for the `Table` class.
 
 #### Testing
-The tests are designed to be comprehensive and cover all required scenarios:
+Covers different scenarios:
 
 1. **`testTableConstructorAndGetters`**  
-   This "happy path" test verifies that a Table object with valid inputs is created correctly and its getters return the proper values.
+   Happy path - checks that a table with valid inputs is created and getters work.
 
 2. **`testTableWithZeroCapacity`**  
-   This "edge case" test validates that a table can be created with a capacity of 0.
+   Edge case - ensures a table can be created with capacity of 0.
 
 3. **`testTableWithNegativeCapacity`**  
-   This "error case" test confirms that the constructor correctly throws an `IllegalArgumentException` when a negative capacity is used.
+   Error case - makes sure the constructor throws an `IllegalArgumentException` for negative capacity.
 
 4. **`testTableWithExcessiveCapacity`**  
-   This "error case" test confirms that the constructor correctly throws an `IllegalArgumentException` when a capacity greater than the limit (2) is used.
+   Error case - makes sure the constructor throws an `IllegalArgumentException` when capacity exceeds the limit (2).
 
 ---
 
 ### Reservation.java
 
 #### Functionality
-This class is a data model that represents a single reservation. It stores the `day`, `time`, the `User` who made the booking, the `partySize`, and the `Table` that was reserved. The constructor includes validation to throw an `IllegalArgumentException` if the `user` or `day` are `null`, or if the `partySize` is zero.
+Represents a reservation with day, time, the booking user, party size, and the reserved table. Constructor validates that `user` and `day` aren't `null` and `partySize` isn't zero.
 
 #### Testing
 See `ReservationTest.java`
 
 #### Relationships
-This class implements the `ReservationGuide` interface and `java.io.Serializable`. `Reservation` objects are stored in an `ArrayList` within the `Database` class. It also contains `User` and `Table` objects.
+Implements `ReservationGuide` interface and `java.io.Serializable`. Stored in an `ArrayList` in the `Database` class. Contains `User` and `Table` objects.
 
 ---
 
 ### ReservationGuide.java
 
 #### Functionality
-This is the dedicated interface for the `Reservation` class. It ensures that any `Reservation` object will have public methods for `getDay()`, `getTime()`, `getUser()`, `getTable()`, `getPartySize()`, and `isTableOccupied()`.
+Interface for the `Reservation` class. Requires `getDay()`, `getTime()`, `getUser()`, `getTable()`, `getPartySize()`, and `isTableOccupied()` methods.
 
 #### Testing
 No testing. 
 
 #### Relationships
-Interface implemented by the `Reservation` class
+Implemented by the `Reservation` class.
 
 ---
 
 ### ReservationTest.java
 
 #### Functionality
-This class contains the JUnit test case for the `Reservation` class.
+JUnit tests for the `Reservation` class.
 
 #### Testing
-The tests are designed to be comprehensive and cover all required scenarios:
+Covers various scenarios:
 
-1. **`testReservationConstructorAndGetters`**
-        This "happy path" test verifies that a Reservation object with valid inputs is created correctly and its getters return the proper values.
+1. **`testReservationConstructorAndGetters`**  
+   Happy path - checks that a reservation with valid inputs is created and getters work.
 
-2. **`testReservationWithInvalidPartySize`**
-    This "error case" test checks that a reservation with a negative party size is still created (revealing a potential logic flaw to be fixed in a future phase).
+2. **`testReservationWithInvalidPartySize`**  
+   Error case - tests that a reservation with negative party size is still created (logic flaw to fix later).
 
-3. **`testReservationWithNullUser`**
-    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when a null User is used.
+3. **`testReservationWithNullUser`**  
+   Error case - ensures the constructor throws an `IllegalArgumentException` for null users.
 
-4. **`testReservationWithNullDay`**
-    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when a null day is used.
+4. **`testReservationWithNullDay`**  
+   Error case - ensures the constructor throws an `IllegalArgumentException` for null days.
 
-5. **`testReservationWithZeroPartySize`**
-    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when partySize is 0.
+5. **`testReservationWithZeroPartySize`**  
+   Error case - ensures the constructor throws an `IllegalArgumentException` when `partySize` is 0.
 
 ---
 
 ### Restaurant.java
 
-
 #### Functionality
-This class acts as the main manager for the restaurant's seating plan. It holds the total `capacity` and the `seatingPlan`. Its constructor initializes the restaurant's state. It includes methods like `occupyReservation()` and `removeReservation()` to change the state of seats within the `seatingPlan` based on a reservation.
+Manages the restaurant's seating plan. Holds the total capacity and a 2D array of tables. Includes `occupyReservation()` and `removeReservation()` methods to update seat states based on reservations.
 
 #### Testing
-See RestaurantTest.java.
+See `RestaurantTest.java`.
 
 #### Relationships
-This class implements the RestaurantGuide interface. It holds a Table[][] array and interacts with Reservation and Seat objects to manage bookings
+Implements `RestaurantGuide` interface. Contains a `Table[][]` array and works with `Reservation` and `Seat` objects.
 
 ---
 
+### RestaurantGuide.java
 
-#### RestaurantGuide.java
-
-
-### Functionality
-This is the dedicated interface for the `Restaurant` class. It ensures that any `Restaurant` object will have public methods for `getCapacity()`, `getSeatingPlan()`, `occupyReservation()`, and `removeReservation()`.
+#### Functionality
+Interface for the `Restaurant` class. Requires `getCapacity()`, `getSeatingPlan()`, `occupyReservation()`, and `removeReservation()` methods.
 
 #### Testing
-No test.
+No testing.
 
-#### Relationship
-Interface is implemented by the Restaurant class.
+#### Relationships
+Implemented by the `Restaurant` class.
+
+---
 
 ### RestaurantTest.java
-Functionality: This class contains the comprehensive JUnit test case for the Restaurant class.
 
-Testing: The tests are designed to be comprehensive and cover the class's main logic:
+#### Functionality
+JUnit tests for the `Restaurant` class.
 
-testGetters: This test verifies that the getCapacity() and getSeatingPlan() methods return the correct values set in the constructor.
+#### Testing
+Tests the main logic:
 
-testOccupyReservation: This test checks that the occupyReservation() method correctly modifies the state of Seat objects within the seatingPlan (setting the user and occupying the seat).
+1. **`testGetters`**  
+   Checks that `getCapacity()` and `getSeatingPlan()` return the values set in the constructor.
 
-testRemoveReservation: This test validates that the removeReservation() method correctly reverts the state of Seat objects, freeing the seat and setting its user to null.
+2. **`testOccupyReservation`**  
+   Makes sure `occupyReservation()` updates `Seat` objects in the seating plan (sets user and occupies seat).
 
-Relationships: This class directly tests the Restaurant class.
+3. **`testRemoveReservation`**  
+   Ensures `removeReservation()` reverts seat states (frees seat and clears user).
+
+#### Relationships
+Tests the `Restaurant` class.
+
+---
+
+### Database.java
+
+#### Functionality
+Central database managing persistence for users and reservations. Stores two `ArrayLists` - one for users, one for reservations. All methods are synchronized for thread safety. Writes to disk (`users.txt` and `reservations.txt`) on any modification and loads data on startup.
+
+#### Testing
+See `DatabaseTest.java`.
+
+#### Relationships
+Implements `DatabaseGuide` interface. Used by the server to manage all user and reservation data.
+
+---
+
+### DatabaseGuide.java
+
+#### Functionality
+Interface for the `Database` class. Defines methods like `makeNewUser()`, `deleteUser()`, `createReservation()`, `deleteReservation()`, `getUsers()`, and `getReservations()`.
+
+#### Testing
+No testing
+
+#### Relationships
+Implemented by `Database.java`.
+
+---
+
+### DatabaseTest.java
+
+#### Functionality
+JUnit tests for the `Database` class.
+
+#### Testing
+Tests persistence (round-trip testing):
+
+1. **`testSaveAndReadUsers`**  
+   Creates a database, saves new users (writes to file), then creates another database instance to check that users loaded from the file.
+
+2. **`testReadUsersWhenFileMissing`**  
+   Edge case - makes sure the constructor doesn't crash when `users.txt` is missing and returns an empty `ArrayList` instead.
+
+#### Relationships
+Tests the `Database` class.
