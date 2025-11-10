@@ -5,7 +5,7 @@ public class Reservation implements ReservationGuide {
     private int partySize;
     private User user;
 
-    public Reservation (String day, double time, User user, int partySize, int table) {
+    public Reservation (String day, double time, User user, int partySize, Table table) {
         this.day = day;
         this.time = time;
         this.table = table;
