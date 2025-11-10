@@ -56,7 +56,7 @@ public class Database implements IDatabase {
         }
     }
 
-    //method which creates 
+    //method which creates a new Reservation object given day, time, user, partySize, and table as input and adds the object to the reservations ArrayList 
     public void createReservation (String day, double time, User user, int partySize, Table table) {
         synchronized (lock) {
             Reservation reservation = new Reservation(day, time, user, partySize, table);
@@ -65,6 +65,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method which deletes a Reservation given day, time, user, partySize, and table as input and removes the Reservation object from the reservations ArrayList
     public void deleteReservation (Reservation reservation) {
         synchronized (lock) {
             reservations.remove(reservation);
