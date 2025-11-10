@@ -224,4 +224,42 @@ The tests are designed to be comprehensive and cover all required scenarios:
 
 ---
 
-### Re
+### Restaurant.java
+
+
+#### Functionality
+This class acts as the main manager for the restaurant's seating plan. It holds the total `capacity` and the `seatingPlan`. Its constructor initializes the restaurant's state. It includes methods like `occupyReservation()` and `removeReservation()` to change the state of seats within the `seatingPlan` based on a reservation.
+
+#### Testing
+See RestaurantTest.java.
+
+#### Relationships
+This class implements the RestaurantGuide interface. It holds a Table[][] array and interacts with Reservation and Seat objects to manage bookings
+
+---
+
+
+#### RestaurantGuide.java
+
+
+### Functionality
+This is the dedicated interface for the `Restaurant` class. It ensures that any `Restaurant` object will have public methods for `getCapacity()`, `getSeatingPlan()`, `occupyReservation()`, and `removeReservation()`.
+
+#### Testing
+No test.
+
+#### Relationship
+Interface is implemented by the Restaurant class.
+
+### RestaurantTest.java
+Functionality: This class contains the comprehensive JUnit test case for the Restaurant class.
+
+Testing: The tests are designed to be comprehensive and cover the class's main logic:
+
+testGetters: This test verifies that the getCapacity() and getSeatingPlan() methods return the correct values set in the constructor.
+
+testOccupyReservation: This test checks that the occupyReservation() method correctly modifies the state of Seat objects within the seatingPlan (setting the user and occupying the seat).
+
+testRemoveReservation: This test validates that the removeReservation() method correctly reverts the state of Seat objects, freeing the seat and setting its user to null.
+
+Relationships: This class directly tests the Restaurant class.
