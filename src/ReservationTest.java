@@ -6,7 +6,8 @@ public class ReservationTest {
     @Test(timeout = 1000)
     public void testReservationConstructorAndGetters() {
         User testUser = new User("testUser", "password123");
-        Reservation reservation = new Reservation("Friday", 19.30, testUser, 4);
+        Table newTable1 = new Table(4, 4);
+        Reservation reservation = new Reservation("Friday", 19.30, testUser, 4, newTable);
 
         assertNotNull("Reservation object should not be null", reservation);
         assertEquals("Day should be 'Friday'", "Friday", reservation.getDay());
@@ -18,7 +19,8 @@ public class ReservationTest {
     @Test(timeout = 1000)
     public void testReservationWithInvalidPartySize() {
         User testUser = new User("guest", "guestpass");
-        Reservation reservation = new Reservation("Saturday", 20.00, testUser, -1);
+        Table newTable2 = new Table(2, 5);
+        Reservation reservation = new Reservation("Saturday", 20.00, testUser, -1, newTable2);
 
         assertNotNull("Reservation should still be created", reservation);
         assertEquals("Party size should be -1", -1, reservation.getPartySize());
