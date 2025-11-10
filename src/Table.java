@@ -4,12 +4,14 @@ public class Table implements TableGuide {
     private Seat[] seats;
     private int price;
 
-    public Table(int tableNumber, int capacity) {
+    public Table(int tableRow, int tableColumn, int capacity, int price) {
         if (capacity < 0 || capacity > 2) {
             throw new IllegalArgumentException("Capacity must be between 0 and 2");
         }
-        this.tableNumber = tableNumber;
-        this.peopleSittingHere = new User[capacity];
+        this.tableRow = tableRow;
+        this.tableColumn = tableColumn;
+        this.seats = new Seat[capacity];
+        this.price = price; 
     }
     
     public int getTableRow() {
