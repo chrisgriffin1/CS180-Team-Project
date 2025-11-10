@@ -7,7 +7,7 @@ public class ReservationTest {
     public void testReservationConstructorAndGetters() {
         User testUser = new User("testUser", "password123");
         Table newTable1 = new Table(4, 4);
-        Reservation reservation = new Reservation("Friday", 19.30, testUser, 4, newTable);
+        Reservation reservation = new Reservation("Friday", 19.30, testUser, 4, newTable1);
 
         assertNotNull("Reservation object should not be null", reservation);
         assertEquals("Day should be 'Friday'", "Friday", reservation.getDay());
@@ -28,7 +28,8 @@ public class ReservationTest {
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
     public void testReservationWithNullUser() {
-        Reservation reservation = new Reservation("Sunday", 18.00, null, 2);
+        Table newTable3 = new Table(3, 3);
+        Reservation reservation = new Reservation("Sunday", 18.00, null, 2, newTable3);
 
         assertNotNull(reservation);
         assertNull(reservation.getUser());
