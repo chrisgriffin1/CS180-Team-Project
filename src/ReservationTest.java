@@ -49,7 +49,6 @@ public class ReservationTest {
     public void testReservationWithZeroPartySize() {
         User testUser = new User("bob", "bobpass");
         Reservation reservation = new Reservation("Monday", 21.00, testUser, 0, new Table(1, 3, 2, 3));
-
         assertNotNull(reservation);
         assertEquals("Party size should be 0", 0, reservation.getPartySize());
     }
