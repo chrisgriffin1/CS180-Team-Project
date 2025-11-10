@@ -10,7 +10,7 @@ public class TableTest{
         assertNotNull("Table object should not be null", table);
         assertEquals("Table row should be 1", 1, table.getTableRow());
         assertEquals("Table column should be 2", 2, table.getTableColumn());
-        assertEquals("Capacity should be 2", 2, table.getCapacity());
+        assertEquals("Capacity should be 2", 2, table.getSeats().length);
     }
 
     @Test(timeout = 1000)
