@@ -173,6 +173,55 @@ The tests are designed to be comprehensive and cover all required scenarios:
 
 ---
 
-### Restaurant.java
+### Reservation.java
 
 #### Functionality
+This class is a data model that represents a single reservation. It stores the `day`, `time`, the `User` who made the booking, the `partySize`, and the `Table` that was reserved. The constructor includes validation to throw an `IllegalArgumentException` if the `user` or `day` are `null`, or if the `partySize` is zero.
+
+#### Testing
+See `ReservationTest.java`
+
+#### Relationships
+This class implements the `ReservationGuide` interface and `java.io.Serializable`. `Reservation` objects are stored in an `ArrayList` within the `Database` class. It also contains `User` and `Table` objects.
+
+---
+
+### ReservationGuide.java
+
+#### Functionality
+This is the dedicated interface for the `Reservation` class. It ensures that any `Reservation` object will have public methods for `getDay()`, `getTime()`, `getUser()`, `getTable()`, `getPartySize()`, and `isTableOccupied()`.
+
+#### Testing
+No testing. 
+
+#### Relationships
+Interface implemented by the `Reservation` class
+
+---
+
+### ReservationTest.java
+
+#### Functionality
+This class contains the JUnit test case for the `Reservation` class.
+
+#### Testing
+The tests are designed to be comprehensive and cover all required scenarios:
+
+1. **`testReservationConstructorAndGetters`**
+        This "happy path" test verifies that a Reservation object with valid inputs is created correctly and its getters return the proper values.
+
+2. **`testReservationWithInvalidPartySize`**
+    This "error case" test checks that a reservation with a negative party size is still created (revealing a potential logic flaw to be fixed in a future phase).
+
+3. **`testReservationWithNullUser`**
+    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when a null User is used.
+
+4. **`testReservationWithNullDay`**
+    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when a null day is used.
+
+5. **`testReservationWithZeroPartySize`**
+    This "error case" test confirms that the constructor correctly throws an IllegalArgumentException when partySize is 0.
+
+---
+
+### Re
