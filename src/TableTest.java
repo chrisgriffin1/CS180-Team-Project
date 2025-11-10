@@ -10,7 +10,8 @@ public class TableTest{
         assertNotNull("Table object should not be null", table);
         assertEquals("Table row should be 1", 1, table.getTableRow());
         assertEquals("Table column should be 2", 2, table.getTableColumn());
-        assertEquals("Capacity should be 2", 2, table.getCapacity());
+        assertEquals("Table capacity should be 2", 2, table.getSeats().length);
+        assertEquals("Table price should be 8", 8, table.getPrice());
     }
 
     @Test(timeout = 1000)
@@ -20,6 +21,8 @@ public class TableTest{
         assertNotNull("Table object should not be null", table);
         assertEquals("Table row should be 3", 3, table.getTableRow());
         assertEquals("Table column should be 1", 1, table.getTableColumn());
+        assertEquals("Table capacity should be 4", 4, table.getSeats().length);
+        assertEquals("Table price should be 10", 10, table.getPrice());
     }
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
@@ -29,6 +32,9 @@ public class TableTest{
         assertNotNull(table);
         assertEquals("Table row should be 2", 2, table.getTableRow());
         assertEquals("Table column should be 5", 5, table.getTableColumn());
+        assertEquals("Table capacity should be 2", 2, table.getSeats().length);
+        assertEquals("Table price should be 5", 5, table.getPrice());
+
     }
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
@@ -38,5 +44,7 @@ public class TableTest{
         assertNotNull(table);
         assertEquals("Table row should be 4", 4, table.getTableRow());
         assertEquals("Table column should be 5", 5, table.getTableColumn());
+        assertEquals("Table capacity should be 6", 6, table.getSeats().length);
+        assertEquals("Table price should be 8", 8, table.getPrice());
     }
 }
