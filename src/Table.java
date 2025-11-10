@@ -1,3 +1,8 @@
+/*
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
 public class Table implements TableGuide {
     private int tableRow;
     private int tableColumn;

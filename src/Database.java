@@ -1,6 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/*
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
 public class Database implements IDatabase {
 
     public static Object lock = new Object();

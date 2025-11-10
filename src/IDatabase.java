@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/*
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
 public interface IDatabase {
     void makeNewUser(String username, String password);
 

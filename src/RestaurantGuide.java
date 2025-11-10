@@ -1,3 +1,8 @@
+/*
+ * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
+ * @version November 9, 2025
+ */
+
 public interface RestaurantGuide {
     public int getCapacity();
     public Table[][] getSeatingPlan();
