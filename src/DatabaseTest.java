@@ -28,7 +28,7 @@ public class DatabaseTest {
         ArrayList<User> usersRead = db.getUsers();
 
         assertNotNull("Users read from database should not be null", usersRead);
-        assertEquals("Number of users read should match number saved", usersToSave.length, usersRead.length);
+        assertEquals("Number of users read should match number saved", usersToSave.length, usersRead.size());
 
         assertEquals("First user's username should match", usersToSave[0].getUserName(), usersRead.get(0).getUserName());
         assertEquals("First user's password should match", usersToSave[0].getPassword(), usersRead.get(0).getPassword());
@@ -45,6 +45,6 @@ public class DatabaseTest {
             testFile.delete();
         }
         db.readUsers();
-        assertNull("No users should be read when file is missing", db.getLastReadUsers());
+        assertNull("No users should be read when file is missing", db.getUsers());
     }
 }
