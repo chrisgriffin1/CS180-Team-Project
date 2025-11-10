@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @version November 9, 2025
  */
 
-public class Database implements IDatabase {
+public class Database implements DatabaseGuide {
 
     public static Object lock = new Object();
     File reservationsFile = new File("reservations.txt");

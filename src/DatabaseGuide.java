@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * @version November 9, 2025
  */
 
-public interface IDatabase {
+public interface DatabaseGuide {
     void makeNewUser(String username, String password);
 
     void deleteUser(String username);
