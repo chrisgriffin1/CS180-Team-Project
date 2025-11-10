@@ -82,7 +82,7 @@ public class Database implements IDatabase {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            return new ArrayList<>();
+            return null;
         }
     }
     

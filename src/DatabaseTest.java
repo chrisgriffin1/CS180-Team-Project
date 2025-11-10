@@ -30,11 +30,11 @@ public class DatabaseTest {
         assertNotNull("Users read from database should not be null", usersRead);
         assertEquals("Number of users read should match number saved", usersToSave.length, usersRead.size());
 
-        assertEquals("First user's username should match", usersToSave[0].getUserName(), usersRead.get(0).getUserName());
-        assertEquals("First user's password should match", usersToSave[0].getPassword(), usersRead.get(0).getPassword());
+        assertEquals("First user's username should match", db.getUsers().get(0).getUserName(), usersRead.get(0).getUserName());
+        assertEquals("First user's password should match", db.getUsers().get(0).getPassword(), usersRead.get(0).getPassword());
 
-        assertEquals("Second user's username should match", usersToSave[1].getUserName(), usersRead.get(1).getUserName());
-        assertEquals("Second user's password should match", usersToSave[1].getPassword(), usersRead.get(1).getPassword());
+        assertEquals("Second user's username should match", db.getUsers().get(1).getUserName(), usersRead.get(1).getUserName());
+        assertEquals("Second user's password should match", db.getUsers().get(1).getPassword(), usersRead.get(1).getPassword());
     }
 
     @Test(timeout = 1000)
@@ -45,6 +45,6 @@ public class DatabaseTest {
             testFile.delete();
         }
         db.readUsers();
-        assertNull("No users should be read when file is missing", db.getUsers());
+        assertNull("No users should be read when file is missing", db.readUsers());
     }
 }
