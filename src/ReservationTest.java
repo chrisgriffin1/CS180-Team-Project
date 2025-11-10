@@ -28,7 +28,7 @@ public class ReservationTest {
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
     public void testReservationWithNullUser() {
-        Table newTable3 = new Table(3, 4, 4 ,3);
+        Table newTable3 = new Table(3, 4, 2 ,3);
         Reservation reservation = new Reservation("Sunday", 18.00, null, 2, newTable3);
 
         assertNotNull(reservation);
@@ -39,7 +39,7 @@ public class ReservationTest {
     public void testReservationWithNullDay() {
         User testUser = new User("alice", "alicepass");
         
-        Reservation reservation = new Reservation(null, 17.00, testUser, 3, new Table(1, 2, 3, 1));
+        Reservation reservation = new Reservation(null, 17.00, testUser, 3, new Table(1, 2, 2, 1));
 
         assertNotNull(reservation);
         assertNull(reservation.getDay());
@@ -48,7 +48,7 @@ public class ReservationTest {
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
     public void testReservationWithZeroPartySize() {
         User testUser = new User("bob", "bobpass");
-        Reservation reservation = new Reservation("Monday", 21.00, testUser, 0, new Table(1, 3, 3, 3));
+        Reservation reservation = new Reservation("Monday", 21.00, testUser, 0, new Table(1, 3, 2, 3));
 
         assertNotNull(reservation);
         assertEquals("Party size should be 0", 0, reservation.getPartySize());
