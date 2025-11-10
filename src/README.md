@@ -24,7 +24,7 @@ java -cp ".;lib\*" org.junit.runner.JUnitCore DatabaseTest TableTest
 
 - Ishaan Limaye 
 - Jaden Fang
-- Aiden Prananta
+- Aiden Prananta - Submitted through Vocareum. 
 - Christopher Griffin
 
 ## 3. Class Descriptions
