@@ -1,12 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
 
-/*
+/**
  * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
  * @version November 9, 2025
  */
 
-public class Database implements IDatabase {
+public class Database implements DatabaseGuide {
 
     public static Object lock = new Object();
     File reservationsFile = new File("reservations.txt");
@@ -21,6 +21,7 @@ public class Database implements IDatabase {
         reservations = readReservations();
     }
 
+    //method creates a new User object given a username and password as input, and adds the new user object to an ArrayList of type User
     public void makeNewUser(String username, String password) {
         synchronized (lock) {
             User newUser = new User(username, password);
@@ -35,6 +36,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method gets a User object given a username as input from the users ArrayList and removes it from the users ArrayList.
     public void deleteUser(String username) {
         synchronized (lock) {
             for (int i = 0; i < users.size(); i++) {
@@ -54,6 +56,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method which creates a new Reservation object given day, time, user, partySize, and table as input and adds the object to the reservations ArrayList 
     public void createReservation (String day, double time, User user, int partySize, Table table) {
         synchronized (lock) {
             Reservation reservation = new Reservation(day, time, user, partySize, table);
@@ -62,6 +65,7 @@ public class Database implements IDatabase {
         }
     }
 
+    //method which deletes a Reservation given day, time, user, partySize, and table as input and removes the Reservation object from the reservations ArrayList
     public void deleteReservation (Reservation reservation) {
         synchronized (lock) {
             reservations.remove(reservation);
@@ -71,7 +75,9 @@ public class Database implements IDatabase {
         
     }
 
-
+    /**
+     * saves users to file
+     */
     public void saveUsers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
             oos.writeObject(this.users);
@@ -79,7 +85,9 @@ public class Database implements IDatabase {
             e.printStackTrace();
         }
     }
-    
+    /**
+     * Reads users from file
+     */
     public ArrayList<User> readUsers() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
@@ -90,7 +98,10 @@ public class Database implements IDatabase {
             return new ArrayList<User>();
         }
     }
-    
+
+    /**
+     * saves reservations to file
+     */
     public void saveReservations() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
             oos.writeObject(this.reservations);
@@ -99,7 +110,9 @@ public class Database implements IDatabase {
         }
     }
 
-
+    /**
+     * Reads reservations from file
+     */
     public ArrayList<Reservation> readReservations() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(reservationsFile))) {
@@ -110,13 +123,18 @@ public class Database implements IDatabase {
             return new ArrayList<>();
         }
     }
-
+    /**
+     * Gets users
+     */
     public ArrayList<User> getUsers() {
         synchronized (lock) {
             return users;
         }
     }
 
+    /**
+     * Gets reservations
+     */
     public ArrayList<Reservation> getReservations() {
         synchronized (lock) {
             return reservations;
