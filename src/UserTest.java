@@ -19,6 +19,7 @@ public class UserTest {
         assertNotNull(user);
         assertNull("Username should not be an empty string", user.getUserName());
         assertNull("Password should not be an empty string", user.getPassword());
+        
     }
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
