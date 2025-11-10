@@ -137,3 +137,11 @@ The class implements the `TableGuide` interface  and java.io.Serializable. Table
 
 ## TableGuide.java ##
 
+# Functionality
+This is the interface for the `Table` class. It ensures that any `Table` object will have public methods for `getTableRow()`, `getTableColumn`, `getSeats()`, and `getPrice()`.
+
+# Testing
+No testing
+
+# Relationships
+Interface implemented by the `Table` class. 
