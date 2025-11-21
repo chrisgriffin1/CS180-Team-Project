@@ -14,7 +14,7 @@ public class GUITest extends JFrame {
     // 3. Mock Database (for testing logic)
     private MockServer localServer = new MockServer();
 
-    public Main() {
+    public GUITest() {
         super("Reservation App - Multi-Screen Demo");
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -152,7 +152,7 @@ public class GUITest extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Main::new);
+        SwingUtilities.invokeLater(GUITest::new);
     }
 
     // Mock Database (Same as before)
