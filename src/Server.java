@@ -24,17 +24,17 @@ public class Server implements Runnable {
             try {
                 socket = serverSocket.accept();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+                    PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
                     String clientMessage = reader.readLine();
 
                 } catch (IOException e) {
-                    System.out.println("Client  error");
+                    System.out.println("Client error");
                 } finally {
                     if (socket != null) {
                         socket.close();
                     }
                 }
-
+                
             } catch (Exception e) {
                 
             }

@@ -27,12 +27,6 @@ public class Database implements DatabaseGuide {
             User newUser = new User(username, password);
             users.add(newUser);
             saveUsers();
-        /**try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
-            oos.writeObject(users);
-        }   catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
         }
     }
 
@@ -46,13 +40,7 @@ public class Database implements DatabaseGuide {
                 }
             }
             saveUsers();
-            /**
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
-                oos.writeObject(users);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }   
-            */
+         
         }
     }
 
