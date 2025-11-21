@@ -22,31 +22,12 @@ public class Restaurant {
         this.partySize = partySize;
     }
 
-    //getter method which gets day
-    public String getDay() {
-        return day;
-    }
-
-    //getter method which gets time
-    public double getTime() {
-        return time;
-    }
-
-    //getter method which gets user
-    public User getUser() {
-        return user;
-    }
-
-    //getter method which gets party size
-    public int getPartySize() {
-        return partySize;
-    }
-
+    //getter method which gets capacity of restaurant
     public int getCapacity() {
         return capacity;
     }
 
-
+    //getter method for the seating plan of the restaurant
     public Table[][] getSeatingPlan() {
         return seatingPlan;
     }
@@ -57,8 +38,8 @@ public class Restaurant {
 
     }
 
-    public void deleteReservation(Reservation r) {
-
+    public void removeReservation(Reservation r) {
+        
     }   
     
     

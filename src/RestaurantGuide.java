@@ -4,10 +4,6 @@
  */
 
 public interface RestaurantGuide {
-    public String getDay();
-    public double getTime();
-    public User getUser();
-    public int getPartySize();
     public int getCapacity();
     public Table[][] getSeatingPlan();
     public void occupyReservation(Reservation r);
