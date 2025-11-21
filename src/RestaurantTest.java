@@ -22,7 +22,7 @@ public class RestaurantTest {
     public void setUp() {
         testUser = new User("testUser", "pass");
         
-        testTable = new Table(0, 0, 2, 10); // 2-seat table at (0,0)
+        testTable = new Table(0, 0, 2, 10); 
         
         seatingPlan = new Table[1][1];
         seatingPlan[0][0] = testTable;
