@@ -25,7 +25,10 @@ public class Server implements Runnable {
                 socket = serverSocket.accept();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+                    
                     String clientMessage = reader.readLine();
+
+                    
 
                 } catch (IOException e) {
                     System.out.println("Client error");
@@ -34,7 +37,7 @@ public class Server implements Runnable {
                         socket.close();
                     }
                 }
-                
+
             } catch (Exception e) {
                 
             }
