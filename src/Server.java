@@ -5,6 +5,11 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 
 public class Server implements Runnable {
+
+    public static void main(String[] args) {
+        Thread serverThread = new Thread(new Server());
+        serverThread.start();
+    }
     
     public void run() {
         Database db = new Database();

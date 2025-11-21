@@ -1,97 +1,101 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.lang.reflect.Array;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Random;
-import javax.swing.JOptionPane;
 
-import static java.lang.Integer.parseInt;
+public class Client extends JFrame {
 
-public class Client extends JComponent implements Runnable {
-    private Image image;
-    private int curX;
-    private int curY;
-    private int oldX;
-    private int oldY;
-    Graphics2D graphics2D;
-    private JButton logInButton;
-    private JButton createNewUserButton;
-    private Color penColor = Color.black;
-    Paint paint;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton createButton;
+    private Socket socket;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    
-    public static void main(String[] args) throws UnknownHostException, IOException {
+    public Client() {
+        super("Restaurant Client - Create User");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        try {   
+        try {
             JOptionPane.showMessageDialog(null, "Welcome to the restaurant!",
-                    "Search Engine", JOptionPane.INFORMATION_MESSAGE);
+                    "Restaurant Client", JOptionPane.INFORMATION_MESSAGE);
 
-            Scanner scanner = new Scanner(System.in);
-            Socket socket = new Socket("localhost", 47906);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            socket = new Socket("localhost", 47906);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream(), true);
 
             JOptionPane.showMessageDialog(null, "Connection established!",
-                    "Search Engine", JOptionPane.INFORMATION_MESSAGE);
-        
-            
-                
-                
+                    "Restaurant Client", JOptionPane.INFORMATION_MESSAGE);
 
-        public void run() {
-            JFrame frame = new JFrame("Paint"); //change if needed.
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 700);
-            frame.setLocationRelativeTo(null);
-            Container content = frame.getContentPane();
-            content.setLayout(new BorderLayout());
-            logInButton = new JButton("Log In");
-            createNewUserButton = new JButton("Create New User");
-            clearButton.addActionListener(actionListener);
-            fillButton.addActionListener(actionListener);
-            
+            setupGUI();
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Failed to connect to server: " + e.getMessage(),
+                    "Connection Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
-
-        /* public static void main(String[] args) {
-            SwingUtilities.invokeLater();
-        } */    
-        
-
-        ActionListener actionListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == logInButton) {
-                
-            } 
-            
-            if (e.getSource() == createNewUserButton) {
-
-            } 
-
-
-
-
-
-
-        }
-        }        
-
-        } catch (UnknownHostException uhe) {
-            uhe.printStackTrace();
-        }
-        
-        
-
-
     }
 
+    private void setupGUI() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.setBackground(new Color(40, 44, 52));
 
+        JLabel title = new JLabel("Create New User");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
 
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setForeground(Color.WHITE);
+        usernameField = new JTextField(15);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setForeground(Color.WHITE);
+        passwordField = new JPasswordField(15);
+
+        createButton = new JButton("Create");
+
+        panel.add(title);
+        panel.add(userLabel);
+        panel.add(usernameField);
+        panel.add(passLabel);
+        panel.add(passwordField);
+        panel.add(createButton);
+
+        add(panel);
+
+        createButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+            if (!username.isEmpty() && !password.isEmpty()) {
+                String response = sendCommand("New user", username, password);
+                if ("Invalid command".equals(response)) {
+                    JOptionPane.showMessageDialog(this, "Failed to create user.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "User created successfully.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please enter username and password.");
+            }
+        });
+
+        setVisible(true);
+    }
+
+    private String sendCommand(String command, String... params) {
+        try {
+            String cmd = command + ";" + String.join(" ", params);
+            writer.println(cmd);
+            System.out.println(cmd);
+            return reader.readLine();
+        } catch (IOException e) {
+            return "Error";
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Client::new);
+    }
 }
