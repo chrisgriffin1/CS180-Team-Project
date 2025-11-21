@@ -319,35 +319,79 @@ Tests the `Database` class.
 
 ### Client.java
 
+#### Functionality
 
 
+#### Testing
 
+
+#### Relationships
 
 
 ---
 
 ### ClientGuide.java
 
+#### Functionality
+Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
 
+#### Testing
+No testing
 
+#### Relationships
+Implemented by `Client.java`.
 
+---
 
+### ClientTest.java
 
+#### Functionality
+Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
 
+#### Testing
+No testing
 
-
-
+#### Relationships
+Implemented by `Client.java`.
 
 
 ---
 
 ### Server.java
 
+#### Functionality
+Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
 
+#### Testing
+See `ServerTest.java`.
 
-
+#### Relationships
 
 
 ---
 
 ### ServerGuide.java
+
+#### Functionality
+Interface for the `Server` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
+
+#### Testing
+No testing
+
+#### Relationships
+Implemented by `Server.java`.
+
+--- 
+
+### ServerTest.java
+
+#### Functionality
+
+
+#### Testing
+
+
+#### Relationships
+
+
+--- 
