@@ -29,6 +29,9 @@ public class Client extends JFrame {
             JOptionPane.showMessageDialog(null, "Connection established!",
                     "Restaurant Client", JOptionPane.INFORMATION_MESSAGE);
 
+
+            JOptionPane.showConfirmDialog(null, "Do you have an existing account?", "Restaurant Client", JOptionPane.YES_NO_OPTION);
+            
             setupGUI();
 
         } catch (Exception e) {

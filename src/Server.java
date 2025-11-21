@@ -48,8 +48,10 @@ public class Server implements Runnable {
 
                     if (command.contains("new user")) {
                         String[] data = command.split(";");
-                        String[] credentials = data[1].split(";");
-                        db.makeNewUser(credentials[0], credentials[1]);
+
+                        ArrayList<User> validUsers = db.getUsers();
+
+                        db.makeNewUser(data[1], data[2]);
                     } else if (command.contains("delete user")) {
                         //db.deleteUser();
                     } else if (command.contains("new reservation")) {
