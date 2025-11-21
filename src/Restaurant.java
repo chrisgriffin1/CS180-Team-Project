@@ -39,4 +39,27 @@ public class Restaurant {
     public int getPartySize() {
         return partySize;
     }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+
+    public Table[][] getSeatingPlan(){
+
+
+    }
+
+    public void occupyReservation(Reservation r) {
+        
+
+
+    }
+
+    public void deleteReservation(Reservation r) {
+
+    }   
+    
+    
+
 }
