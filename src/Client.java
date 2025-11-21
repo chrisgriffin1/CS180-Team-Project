@@ -19,6 +19,7 @@ public class Client extends JFrame {
         setLocationRelativeTo(null);
 
         try {
+            int existingAccountQ = -122;
             JOptionPane.showMessageDialog(null, "Welcome to the restaurant!",
                     "Restaurant Client", JOptionPane.INFORMATION_MESSAGE);
 
@@ -30,9 +31,12 @@ public class Client extends JFrame {
                     "Restaurant Client", JOptionPane.INFORMATION_MESSAGE);
 
 
-            JOptionPane.showConfirmDialog(null, "Do you have an existing account?", "Restaurant Client", JOptionPane.YES_NO_OPTION);
-            
-            setupGUI();
+            existingAccountQ = JOptionPane.showConfirmDialog(null, "Do you have an existing account?", "Restaurant Client", JOptionPane.YES_NO_OPTION);
+            if (existingAccountQ == JOptionPane.YES_OPTION) {
+                // fix here
+            } else {
+                setupGUI(); 
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to connect to server: " + e.getMessage(),
