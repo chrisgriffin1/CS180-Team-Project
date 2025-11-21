@@ -3,7 +3,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.*;
 
-public class Client extends JFrame {
+public class Client extends JFrame implements ClientGuide{
 
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -41,7 +41,7 @@ public class Client extends JFrame {
         }
     }
 
-    private void setupGUI() {
+    public void setupGUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setBackground(new Color(40, 44, 52));
@@ -87,7 +87,7 @@ public class Client extends JFrame {
         setVisible(true);
     }
 
-    private String sendCommand(String command, String... params) {
+    public String sendCommand(String command, String... params) {
         try {
             String cmd = command + ";" + String.join(" ", params);
             writer.println(cmd);
