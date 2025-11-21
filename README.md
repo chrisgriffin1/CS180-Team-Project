@@ -11,13 +11,13 @@ From the root directory of the project, you can compile all Java files. You must
 ### On macOS/Linux
 ```bash
 javac -cp ".:lib/*" *.java
-java -cp ".:lib/*" org.junit.runner.JUnitCore DatabaseTest TableTest
+java -cp ".:lib/*" org.junit.runner.JUnitCore DatabaseTest ReservationTest RestaurantTest TableTest SeatTest UserTest
 ```
 
 ### On Windows
 ```bash
 javac -cp ".;lib\*" *.java
-java -cp ".;lib\*" org.junit.runner.JUnitCore DatabaseTest TableTest
+java -cp ".;lib\*" org.junit.runner.JUnitCore DatabaseTest ReservationTest RestaurantTest TableTest SeatTest UserTest
 ```
 
 ## 2. Submission List
