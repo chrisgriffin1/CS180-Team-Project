@@ -49,6 +49,8 @@ public class Server implements Runnable {
                         writer.println("Invalid command");
                     }
 
+                    
+
                 } catch (IOException e) {
                     System.out.println("Client error");
                 } finally {
@@ -56,7 +58,7 @@ public class Server implements Runnable {
                         socket.close();
                     }
                 }
-                
+
             } catch (Exception e) {
                 
             }

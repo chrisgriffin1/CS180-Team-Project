@@ -21,7 +21,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Restaurant");
         frame.pack();
-        frame.setSize(400, 400);
+        frame.setSize(1500, 700);
         frame.setVisible(true);
         panel.setLayout(null);
 
