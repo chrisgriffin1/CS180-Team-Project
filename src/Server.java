@@ -33,7 +33,7 @@ public class Server implements Runnable {
                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
                     String command = reader.readLine();
                     
-                    // new user command are in the format "new user;username password"
+                    // new user command are in the format "new user;username;password"
 
                     // delete user command is in the format "delete user;username"
 
@@ -48,7 +48,7 @@ public class Server implements Runnable {
 
                     if (command.contains("new user")) {
                         String[] data = command.split(";");
-                        String[] credentials = data[1].split(" ");
+                        String[] credentials = data[1].split(";");
                         db.makeNewUser(credentials[0], credentials[1]);
                     } else if (command.contains("delete user")) {
                         //db.deleteUser();
