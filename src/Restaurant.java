@@ -18,6 +18,12 @@ public class Restaurant {
         this.seatingPlan = seatingPlan;
     }
 
+    //getter method which gets reservation
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+
     //getter method which gets capacity of restaurant
     public int getCapacity() {
         return capacity;
