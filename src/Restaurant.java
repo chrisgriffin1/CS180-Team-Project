@@ -5,38 +5,62 @@
 
 
 public class Restaurant {
-    private String day;
-    private double time;
-    private User user;
-    private int partySize;
+    private int capacity;
+    private Table[][] seatingPlan;
+    private Reservation reservation;
 
-    public Restaurant (String day, double time, User user, int partySize) {
-        if (day == null || user == null || partySize <= 0) {
+    public Restaurant (Reservation reservation, int capacity, Table[][] seatingPlan) {
+        if (reservation == null || capacity <= 0 || seatingPlan.length == 0) {
             throw new IllegalArgumentException("Invalid arguments for Restaurant constructor");
         }
-        this.day = day;
-        this.time = time;
-        this.user = user;
-        this.partySize = partySize;
+        this.reservation = reservation;
+        this.capacity = capacity;
+        this.seatingPlan = seatingPlan;
     }
 
-    //getter method which gets day
-    public String getDay() {
-        return day;
+    //getter method which gets reservation
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    //getter method which gets time
-    public double getTime() {
-        return time;
+
+    //getter method which gets capacity of restaurant
+    public int getCapacity() {
+        return capacity;
     }
 
-    //getter method which gets user
-    public User getUser() {
-        return user;
+    //getter method for the seating plan of the restaurant
+    public Table[][] getSeatingPlan() {
+        return seatingPlan;
     }
 
-    //getter method which gets party size
-    public int getPartySize() {
-        return partySize;
+    public void occupyReservation(Reservation r) {
+        int row = r.getTable().getTableRow();
+        int column = r.getTable().getTableColumn();
+
+        // check if table is occupied, otherwise fill the table
+        if (!(r.isTableOccupied(r.getTable()))) {
+            Table selected = seatingPlan[row][column]; 
+            Seat[] seats = selected.getSeats();
+            for (Seat seat : seats) {
+                seat.setUser(r.getUser());
+                seat.occupy();   
+            }    
+        }
+
+
     }
-}
+
+    public void removeReservation(Reservation r) {
+        int row = r.getTable().getTableRow();
+        int column = r.getTable().getTableColumn();
+        Table selected = seatingPlan[row][column]; 
+        Seat[] seats = selected.getSeats();
+        for (Seat seat : seats) {
+            seat.setUser(null);
+            seat.free();   
+        }
+    }
+
+
+}   
