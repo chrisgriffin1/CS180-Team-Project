@@ -16,6 +16,9 @@ public class Table implements TableGuide {
         this.tableRow = tableRow;
         this.tableColumn = tableColumn;
         this.seats = new Seat[capacity];
+        for (int i = 0; i < capacity; i++) {
+            this.seats[i] = new Seat(null);
+        }
         this.price = price; 
     }
     // Gets table row

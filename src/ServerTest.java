@@ -29,7 +29,7 @@ public class ServerTest {
     public void testServerCanBeUsedInThread() {
         Server s = new Server();
         Thread t = new Thread();
-        asserNotNull("Thread object should not be null when created with Server", t);
+        assertNotNull("Thread object should not be null when created with Server", t);
     }
 
     @Test(timeout = 5000)
