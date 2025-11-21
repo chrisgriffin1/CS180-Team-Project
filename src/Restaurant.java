@@ -9,6 +9,8 @@ public class Restaurant {
     private double time;
     private User user;
     private int partySize;
+    private int capacity;
+    private Table[][] seatingPlan;
 
     public Restaurant (String day, double time, User user, int partySize) {
         if (day == null || user == null || partySize <= 0) {
@@ -45,9 +47,8 @@ public class Restaurant {
     }
 
 
-    public Table[][] getSeatingPlan(){
-
-
+    public Table[][] getSeatingPlan() {
+        return seatingPlan;
     }
 
     public void occupyReservation(Reservation r) {
