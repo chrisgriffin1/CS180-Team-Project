@@ -5,21 +5,17 @@
 
 
 public class Restaurant {
-    private String day;
-    private double time;
-    private User user;
-    private int partySize;
     private int capacity;
     private Table[][] seatingPlan;
+    private Reservation reservation;
 
-    public Restaurant (String day, double time, User user, int partySize) {
-        if (day == null || user == null || partySize <= 0) {
+    public Restaurant (Reservation reservation, int capacity, Table[][] seatingPlan) {
+        if (reservation == null || capacity <= 0 || seatingPlan.length == 0) {
             throw new IllegalArgumentException("Invalid arguments for Restaurant constructor");
         }
-        this.day = day;
-        this.time = time;
-        this.user = user;
-        this.partySize = partySize;
+        this.reservation = reservation;
+        this.capacity = capacity;
+        this.seatingPlan = seatingPlan;
     }
 
     //getter method which gets capacity of restaurant
