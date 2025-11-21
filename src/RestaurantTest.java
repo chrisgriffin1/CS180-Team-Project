@@ -29,7 +29,7 @@ public class RestaurantTest {
         
         testReservation = new Reservation("Monday", 18.00, testUser, 2, testTable);
         
-        restaurant = new Restaurant("Tuesday", 20.00, testUser, 2, seatingPlan);
+        restaurant = new Restaurant(testReservation, 2, seatingPlan);
     }
 
     @Test(timeout = 1000)
