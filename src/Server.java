@@ -30,8 +30,14 @@ public class Server implements Runnable {
                     
                     // new user command are in the format "new user;username password"
 
+                    // delete user command is in the format "delete user;username"
+
+
+
                     // new reservation command are in the format 
                     // "new reservation;day time username partySize tableRow tableColumn"
+
+                    // delete reservation command are in the format
 
 
 
@@ -40,11 +46,11 @@ public class Server implements Runnable {
                         String[] credentials = data[1].split(" ");
                         db.makeNewUser(credentials[0], credentials[1]);
                     } else if (command.contains("delete user")) {
-                        db.deleteUser();
+                        //db.deleteUser();
                     } else if (command.contains("new reservation")) {
-                        db.createReservation();
+                        // db.createReservation();
                     } else if (command.contains("delete reservation")) {
-                        db.deleteReservation();
+                        // db.deleteReservation();
                     } else {
                         writer.println("Invalid command");
                     }
