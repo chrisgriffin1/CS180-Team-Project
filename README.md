@@ -314,3 +314,40 @@ Tests persistence (round-trip testing):
 
 #### Relationships
 Tests the `Database` class.
+
+---
+
+### Client.java
+
+
+
+
+
+
+---
+
+### ClientGuide.java
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+### Server.java
+
+
+
+
+
+
+---
+
+### ServerGuide.java
