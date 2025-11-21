@@ -33,7 +33,7 @@ public class Client extends JFrame implements ClientGuide{
 
             existingAccountQ = JOptionPane.showConfirmDialog(null, "Do you have an existing account?", "Restaurant Client", JOptionPane.YES_NO_OPTION);
             if (existingAccountQ == JOptionPane.YES_OPTION) {
-                // fix here
+                loginGUI();
             } else {
                 setupGUI(); 
             }
@@ -44,6 +44,53 @@ public class Client extends JFrame implements ClientGuide{
             System.exit(1);
         }
     }
+
+    public void loginGUI() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.setBackground(new Color(40, 44, 52));
+
+        JLabel title = new JLabel("Log In");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setForeground(Color.WHITE);
+        usernameField = new JTextField(15);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setForeground(Color.WHITE);
+        passwordField = new JPasswordField(15);
+
+        createButton = new JButton("Create");
+
+        panel.add(title);
+        panel.add(userLabel);
+        panel.add(usernameField);
+        panel.add(passLabel);
+        panel.add(passwordField);
+        panel.add(createButton);
+
+        add(panel);
+
+        createButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+            if (!username.isEmpty() && !password.isEmpty()) {
+                String response = sendCommand("New user", username, password);
+                if ("Invalid command".equals(response)) {
+                    JOptionPane.showMessageDialog(this, "Failed to create user.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "User created successfully.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please enter username and password.");
+            }
+        });
+
+        setVisible(true);
+    }
+
 
     public void setupGUI() {
         JPanel panel = new JPanel();

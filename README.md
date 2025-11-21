@@ -333,7 +333,7 @@ Tests the `Database` class.
 ### ClientGuide.java
 
 #### Functionality
-Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
+Interface for the `Client` class. Defines the following methods: `loginGUI()`, `setupGUI()`, `sendCommand()`.
 
 #### Testing
 No testing
