@@ -320,20 +320,20 @@ Tests the `Database` class.
 ### Client.java
 
 #### Functionality
-
+GUI client application that connects to the server on localhost:47906. Upon connection, it prompts the user if they have an existing account. If yes, it shows a login GUI; if no, it shows a create user GUI. Both GUIs allow entering username and password, and send "new user" command to the server with the credentials. Displays success or failure messages based on server response.
 
 #### Testing
-
+See `ClientTest.java`.
 
 #### Relationships
-
+Implements `ClientGuide` interface. Communicates with `Server.java` via socket connections. Uses `Database` indirectly through server commands.
 
 ---
 
 ### ClientGuide.java
 
 #### Functionality
-Interface for the `Client` class. Defines the following methods: `loginGUI()`, `setupGUI()`, `sendCommand()`.
+Interface for the `Client` class. Defines methods: `loginGUI()`, `setupGUI()`, and `sendCommand(String command, String... params)`.
 
 #### Testing
 No testing
@@ -346,52 +346,78 @@ Implemented by `Client.java`.
 ### ClientTest.java
 
 #### Functionality
-Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
+JUnit tests for the `Client` class.
 
 #### Testing
-No testing
+Covers basic functionality:
+
+1. **`testClientConstructorNotNull`**  
+   Ensures the Client constructor creates a non-null object.
+
+2. **`testSetupGUIDoesNotCrash`**  
+   Verifies that calling `setupGUI()` does not throw exceptions.
+
+3. **`testLoginGUIDoesNotCrash`**  
+   Verifies that calling `loginGUI()` does not throw exceptions.
+
+4. **`testSendCommandDoesNotCrash`**  
+   Ensures `sendCommand()` returns a non-null result without crashing.
+
+5. **`testClientMainDoesNotCrash`**  
+   Checks that the main method runs without exceptions.
 
 #### Relationships
-Implemented by `Client.java`.
-
+Tests the `Client` class.
 
 ---
 
 ### Server.java
 
 #### Functionality
-Interface for the `Client` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
+Server application that listens on port 47906 for client connections. Accepts incoming sockets, reads commands from clients, and interacts with the `Database` to perform operations like creating new users, deleting users, creating/deleting reservations. Commands are expected in formats like "new user;username;password". Responds with success or "Invalid command".
 
 #### Testing
 See `ServerTest.java`.
 
 #### Relationships
-
+Implements `Runnable` interface. Uses `Database` for data management. Communicated with by `Client.java`.
 
 ---
 
 ### ServerGuide.java
 
 #### Functionality
-Interface for the `Server` class. Defines the following two methods: `setupGUI()` and `sendCommand()`.
+Interface for the `Server` class. Currently empty, intended for future server-related methods.
 
 #### Testing
 No testing
 
 #### Relationships
-Implemented by `Server.java`.
+Intended to be implemented by `Server.java` (though not currently implemented).
 
---- 
+---
 
 ### ServerTest.java
 
 #### Functionality
-
+JUnit tests for the `Server` class.
 
 #### Testing
+Covers basic functionality:
 
+1. **`testServerConstructorNotNull`**  
+   Ensures the Server constructor creates a non-null object.
+
+2. **`testServerImplementsRunnable`**  
+   Verifies that Server implements the Runnable interface.
+
+3. **`testServerCanBeUsedInThread`**  
+   Checks that a Server instance can be used to create a Thread.
+
+4. **`testServerMainDoesNotCrash`**  
+   Ensures the main method runs without exceptions.
 
 #### Relationships
-
+Tests the `Server` class.
 
 --- 
