@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.net.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class Client extends JFrame implements ClientGuide {
 
     // --- STATE & DATA ---
     private String currentUser = null;
-    private NetworkDatabase db;
+    private Database db;
 
     // --- COMPONENT REFERENCES (For dynamic updates) ---
     private JComboBox<String> dateDropdown;
@@ -39,19 +37,8 @@ public class Client extends JFrame implements ClientGuide {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Initialize Network Connection
-        try {
-            db = new NetworkDatabase("localhost", 47906);
-        } catch (IOException e) {
-            // For testing purposes, we don't exit if connection fails,
-            // but we warn. In a real app, we might want to retry or exit.
-            // System.exit(1);
-            JOptionPane.showMessageDialog(null, "Failed to connect to server: " + e.getMessage(),
-                    "Connection Error", JOptionPane.ERROR_MESSAGE);
-            // Initialize a dummy db to prevent null pointer exceptions in tests if they run
-            // without server
-            db = new NetworkDatabase();
-        }
+        // Initialize Local Database
+        db = new Database();
 
         // Setup CardLayout
         cardLayout = new CardLayout();
@@ -85,14 +72,8 @@ public class Client extends JFrame implements ClientGuide {
 
     @Override
     public String sendCommand(String command, String... params) {
-        if (db != null) {
-            String fullCommand = command;
-            if (params.length > 0) {
-                fullCommand += ";" + String.join(";", params);
-            }
-            return db.sendCommand(fullCommand);
-        }
-        return "Error: No Connection";
+        // Kept for compatibility, but logic is now local
+        return "Command received (Local Mode)";
     }
     // ----------------------------------
 
@@ -175,7 +156,7 @@ public class Client extends JFrame implements ClientGuide {
         submitBtn.addActionListener(e -> {
             String u = userField.getText();
             String p = new String(passField.getPassword());
-            if (db.validateUser(u, p)) {
+            if (validateUser(u, p)) {
                 currentUser = u;
                 passField.setText("");
                 refreshDashboard();
@@ -234,10 +215,10 @@ public class Client extends JFrame implements ClientGuide {
                 return;
             }
 
-            if (db.userExists(u)) {
+            if (userExists(u)) {
                 JOptionPane.showMessageDialog(this, "Username taken! Try another.");
             } else {
-                db.addUser(u, p);
+                db.makeNewUser(u, p);
                 JOptionPane.showMessageDialog(this, "Account Created! Please Login.");
                 userField.setText("");
                 passField.setText("");
@@ -319,7 +300,7 @@ public class Client extends JFrame implements ClientGuide {
     }
 
     private void handleCancellation() {
-        List<String> myTables = db.getUserReservations(currentUser);
+        List<String> myTables = getUserReservations(currentUser);
 
         if (myTables.isEmpty()) {
             JOptionPane.showMessageDialog(this, "You have no reservations to cancel.");
@@ -334,7 +315,7 @@ public class Client extends JFrame implements ClientGuide {
                 choices, choices[0]);
 
         if (input != null) {
-            db.cancelReservation(input);
+            cancelReservationHelper(input);
             JOptionPane.showMessageDialog(this, "Reservation cancelled.");
         }
     }
@@ -443,7 +424,7 @@ public class Client extends JFrame implements ClientGuide {
             String dbKey = selectedDate + "|" + selectedTime + "|" + selectedTable;
 
             // Attempt Booking
-            boolean success = db.makeReservation(dbKey, currentUser, selectedParty);
+            boolean success = makeReservation(dbKey, currentUser, selectedParty);
 
             if (success) {
                 JOptionPane.showMessageDialog(this,
@@ -472,7 +453,7 @@ public class Client extends JFrame implements ClientGuide {
             String dbKey = selectedDate + "|" + selectedTime + "|" + tableName;
 
             // Check if this specific slot is taken
-            if (db.isBooked(dbKey)) {
+            if (isBooked(dbKey)) {
                 btn.setBackground(ITALIAN_RED);
                 btn.setText("Occupied");
                 // Note: We leave it disabled so they can't click it,
@@ -503,87 +484,170 @@ public class Client extends JFrame implements ClientGuide {
     }
 
     // ==========================================
-    // NETWORK DATABASE (Replaces MockDatabase)
+    // LOCAL DATABASE HELPER METHODS
     // ==========================================
-    class NetworkDatabase {
-        private Socket socket;
-        private PrintWriter writer;
-        private BufferedReader reader;
 
-        public NetworkDatabase() {
-            // Dummy constructor for testing when connection fails
-        }
-
-        public NetworkDatabase(String host, int port) throws IOException {
-            socket = new Socket(host, port);
-            writer = new PrintWriter(socket.getOutputStream(), true);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        }
-
-        public String sendCommand(String command) {
-            if (writer == null || reader == null)
-                return "Error: No Connection";
-            try {
-                writer.println(command);
-                return reader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "Error";
+    private boolean validateUser(String u, String p) {
+        for (User user : db.getUsers()) {
+            if (user.getUserName().equals(u) && user.getPassword().equals(p)) {
+                return true;
             }
         }
+        return false;
+    }
 
-        public boolean validateUser(String u, String p) {
-            String response = sendCommand("LOGIN;" + u + ";" + p);
-            return "true".equals(response);
-        }
-
-        public boolean userExists(String u) {
-            String response = sendCommand("CHECK_USER;" + u);
-            return "true".equals(response);
-        }
-
-        public void addUser(String u, String p) {
-            sendCommand("CREATE_USER;" + u + ";" + p);
-        }
-
-        public void deleteUser(String u) {
-            sendCommand("DELETE_USER;" + u);
-        }
-
-        public boolean isBooked(String key) {
-            String response = sendCommand("IS_BOOKED;" + key);
-            return "true".equals(response);
-        }
-
-        public boolean makeReservation(String key, String user, String partySizeStr) {
-            // partySizeStr is like "2 People" or "6+ People"
-            int partySize = 1;
-            try {
-                String num = partySizeStr.split(" ")[0];
-                if (num.contains("+"))
-                    num = num.replace("+", "");
-                partySize = Integer.parseInt(num);
-            } catch (Exception e) {
+    private boolean userExists(String u) {
+        for (User user : db.getUsers()) {
+            if (user.getUserName().equals(u)) {
+                return true;
             }
-
-            String response = sendCommand("MAKE_RESERVATION;" + key + ";" + user + ";" + partySize);
-            return "true".equals(response);
         }
+        return false;
+    }
 
-        public void cancelReservation(String prettyString) {
-            sendCommand("CANCEL_RESERVATION;" + prettyString);
-        }
+    private boolean isBooked(String key) {
+        // key: "Date|Time|TableID"
+        String[] keyParts = key.split("\\|");
+        if (keyParts.length == 3) {
+            String date = keyParts[0];
+            String timeStr = keyParts[1];
+            String tableStr = keyParts[2];
+            double time = convertTimeToDouble(timeStr);
+            int tableNum = Integer.parseInt(tableStr.replace("Table ", ""));
 
-        public List<String> getUserReservations(String user) {
-            String response = sendCommand("GET_RESERVATIONS;" + user);
-            List<String> list = new ArrayList<>();
-            if (response != null && !response.isEmpty()) {
-                String[] items = response.split(";");
-                for (String item : items) {
-                    list.add(item);
+            for (Reservation r : db.getReservations()) {
+                // Calculate table number from row/col
+                int rRow = r.getTable().getTableRow();
+                int rCol = r.getTable().getTableColumn();
+                int rTableNum = (rRow - 1) * 3 + rCol;
+
+                if (r.getDay().equals(date) &&
+                        Math.abs(r.getTime() - time) < 0.01 &&
+                        rTableNum == tableNum) {
+                    return true;
                 }
             }
-            return list;
         }
+        return false;
+    }
+
+    private boolean makeReservation(String key, String user, String partySizeStr) {
+        // key: "Date|Time|TableID"
+        // partySizeStr: "2 People" or "6+ People"
+        int partySize = 1;
+        try {
+            String num = partySizeStr.split(" ")[0];
+            if (num.contains("+"))
+                num = num.replace("+", "");
+            partySize = Integer.parseInt(num);
+        } catch (Exception e) {
+        }
+
+        String[] keyParts = key.split("\\|");
+        if (keyParts.length == 3) {
+            String date = keyParts[0];
+            String timeStr = keyParts[1];
+            String tableStr = keyParts[2];
+            double time = convertTimeToDouble(timeStr);
+            int tableNum = Integer.parseInt(tableStr.replace("Table ", ""));
+
+            // Map tableNum to Row/Col
+            int row = (tableNum - 1) / 3 + 1;
+            int col = (tableNum - 1) % 3 + 1;
+
+            // Find user object
+            User userObj = null;
+            for (User u : db.getUsers()) {
+                if (u.getUserName().equals(user)) {
+                    userObj = u;
+                    break;
+                }
+            }
+
+            if (userObj != null) {
+                if (!isBooked(key)) {
+                    Table tableObj = new Table(row, col, 2, 0); // Capacity 2, Price 0 for now
+                    db.createReservation(date, time, userObj, partySize, tableObj);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void cancelReservationHelper(String prettyString) {
+        // prettyString: "Fri, Nov 15 - 6:00 PM - Table 1"
+        String[] pParts = prettyString.split(" - ");
+        if (pParts.length == 3) {
+            String date = pParts[0];
+            String timeStr = pParts[1];
+            String tableStr = pParts[2];
+            double time = convertTimeToDouble(timeStr);
+            int tableNum = Integer.parseInt(tableStr.replace("Table ", ""));
+
+            Reservation toDelete = null;
+            for (Reservation r : db.getReservations()) {
+                int rRow = r.getTable().getTableRow();
+                int rCol = r.getTable().getTableColumn();
+                int rTableNum = (rRow - 1) * 3 + rCol;
+
+                if (r.getDay().equals(date) &&
+                        Math.abs(r.getTime() - time) < 0.01 &&
+                        rTableNum == tableNum) {
+                    toDelete = r;
+                    break;
+                }
+            }
+
+            if (toDelete != null) {
+                db.deleteReservation(toDelete);
+            }
+        }
+    }
+
+    private List<String> getUserReservations(String user) {
+        List<String> list = new ArrayList<>();
+        for (Reservation r : db.getReservations()) {
+            if (r.getUser().getUserName().equals(user)) {
+                // Format: "Fri, Nov 15 - 6:00 PM - Table 1"
+                int rRow = r.getTable().getTableRow();
+                int rCol = r.getTable().getTableColumn();
+                int rTableNum = (rRow - 1) * 3 + rCol;
+
+                String timeStr = convertDoubleToTime(r.getTime());
+                String s = r.getDay() + " - " + timeStr + " - Table " + rTableNum;
+                list.add(s);
+            }
+        }
+        return list;
+    }
+
+    private double convertTimeToDouble(String timeStr) {
+        try {
+            String[] parts = timeStr.split(" "); // ["6:00", "PM"]
+            String[] hm = parts[0].split(":"); // ["6", "00"]
+            int h = Integer.parseInt(hm[0]);
+            if (parts[1].equals("PM") && h != 12)
+                h += 12;
+            if (parts[1].equals("AM") && h == 12)
+                h = 0;
+            return h + (Integer.parseInt(hm[1]) / 60.0);
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private String convertDoubleToTime(double time) {
+        int h = (int) time;
+        int m = (int) Math.round((time - h) * 60);
+        String suffix = "AM";
+        if (h >= 12) {
+            suffix = "PM";
+            if (h > 12)
+                h -= 12;
+        }
+        if (h == 0)
+            h = 12;
+        return String.format("%d:%02d %s", h, m, suffix);
     }
 }
