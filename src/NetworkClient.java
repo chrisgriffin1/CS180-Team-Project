@@ -47,6 +47,17 @@ public class NetworkClient {
         if (time.startsWith("9")) return 21.0;
         return 22.0; 
     }
+    
+    private String formatTime(double time) {
+        if (time == 17.0) return "5:00 PM";
+        if (time == 18.0) return "6:00 PM";
+        if (time == 19.0) return "7:00 PM";
+        if (time == 20.0) return "8:00 PM";
+        if (time == 21.0) return "9:00 PM";
+        return "10:00 PM";
+    }
+
+    // --- MAIN METHODS ---
 
     public boolean makeReservation(String day, String timeStr, String tableName, String user, String partySize) {
         int[] coords = getCoords(tableName);
