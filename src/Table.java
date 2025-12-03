@@ -1,12 +1,10 @@
-/**
- * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
- * @version November 9, 2025
- */
+import java.io.Serializable;
 
-public class Table implements TableGuide {
+// 1. ADD "implements Serializable" HERE
+public class Table implements TableGuide, Serializable {
     private int tableRow;
     private int tableColumn;
-    private Seat[] seats;
+    private Seat[] seats; // Make sure Seat class is also Serializable!
     private int price;
 
     public Table(int tableRow, int tableColumn, int capacity, int price) {
@@ -18,31 +16,9 @@ public class Table implements TableGuide {
         this.seats = new Seat[capacity];
         this.price = price; 
     }
-    // Gets table row
-    public int getTableRow() {
-        return tableRow;
-    }
 
-    // Gets table column
-    public int getTableColumn() {
-        return tableColumn;
-    }
-
-    // Gets seats
-    public Seat[] getSeats() {
-        return seats;
-    }
-
-    // Gets price
-    public int getPrice() {
-        return price;
-    }
-
-    /*
-    public void occupySeats(Seat seat) {
-        for (int a = 0; a < seats.length; a++) {
-            seats[a] = seat;
-        }
-    }
-    */
+    public int getTableRow() { return tableRow; }
+    public int getTableColumn() { return tableColumn; }
+    public Seat[] getSeats() { return seats; }
+    public int getPrice() { return price; }
 }

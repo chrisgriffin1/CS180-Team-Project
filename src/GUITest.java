@@ -3,9 +3,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GUITest extends JFrame {
 
@@ -21,15 +19,17 @@ public class GUITest extends JFrame {
 
     // --- STATE & DATA ---
     private String currentUser = null;
-    private MockDatabase db = new MockDatabase();
+    
+    // REPLACED MOCK DB WITH NETWORK CLIENT
+    private NetworkClient client = new NetworkClient(); 
 
-    // --- COMPONENT REFERENCES (For dynamic updates) ---
+    // --- COMPONENT REFERENCES ---
     private JComboBox<String> dateDropdown;
     private JComboBox<String> timeDropdown;
     private JComboBox<String> partySizeDropdown;
-    private JComboBox<String> tableDropdown; // The specific table selector
+    private JComboBox<String> tableDropdown; 
     private JPanel tableGridPanel;
-    private List<JButton> tableIndicators = new ArrayList<>(); // Read-only visual map
+    private List<JButton> tableIndicators = new ArrayList<>(); 
 
     public GUITest() {
         super("Aiden's Pizzeria - Reservation System");
@@ -75,12 +75,9 @@ public class GUITest extends JFrame {
         gbc.gridx = 0; gbc.gridy = 0;
         panel.add(title, gbc);
 
-        gbc.gridy = 1;
-        panel.add(subtitle, gbc);
-
+        gbc.gridy = 1; panel.add(subtitle, gbc);
         gbc.gridy = 2; gbc.insets = new Insets(40, 10, 10, 10);
         panel.add(loginBtn, gbc);
-
         gbc.gridy = 3; gbc.insets = new Insets(10, 10, 10, 10);
         panel.add(createBtn, gbc);
 
@@ -121,7 +118,9 @@ public class GUITest extends JFrame {
         submitBtn.addActionListener(e -> {
             String u = userField.getText();
             String p = new String(passField.getPassword());
-            if (db.validateUser(u, p)) {
+            
+            // --- NETWORK CALL ---
+            if (client.validateUser(u, p)) {
                 currentUser = u;
                 passField.setText("");
                 refreshDashboard();
@@ -138,7 +137,6 @@ public class GUITest extends JFrame {
     // ==========================================
     // 3. CREATE ACCOUNT SCREEN
     // ==========================================
-
     private JPanel createCreateAccountScreen() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(OFF_WHITE);
@@ -173,14 +171,16 @@ public class GUITest extends JFrame {
                 return;
             }
 
-            if (db.userExists(u)) {
-                JOptionPane.showMessageDialog(this, "Username taken! Try another.");
-            } else {
-                db.addUser(u, p);
+            // --- NETWORK CALL ---
+            boolean success = client.addUser(u, p);
+            
+            if (success) {
                 JOptionPane.showMessageDialog(this, "Account Created! Please Login.");
                 userField.setText("");
                 passField.setText("");
                 cardLayout.show(mainDeck, "LOGIN");
+            } else {
+                JOptionPane.showMessageDialog(this, "Username taken! Try another.");
             }
         });
 
@@ -191,7 +191,6 @@ public class GUITest extends JFrame {
     // ==========================================
     // 4. DASHBOARD
     // ==========================================
-    
     private JLabel welcomeLabel;
 
     private JPanel createDashboardScreen() {
@@ -223,7 +222,7 @@ public class GUITest extends JFrame {
         gbc.gridy = 4; dashboardPanel.add(logoutBtn, gbc);
 
         makeResBtn.addActionListener(e -> {
-            updateAvailabilityMap(); // Refresh map when entering
+            updateAvailabilityMap(); 
             cardLayout.show(mainDeck, "MAKE_RESERVATION");
         });
 
@@ -235,7 +234,8 @@ public class GUITest extends JFrame {
                     "Delete Account", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                db.deleteUser(currentUser);
+                // --- NETWORK CALL ---
+                client.deleteUser(currentUser);
                 currentUser = null;
                 cardLayout.show(mainDeck, "WELCOME");
                 JOptionPane.showMessageDialog(this, "Account Deleted.");
@@ -255,7 +255,8 @@ public class GUITest extends JFrame {
     }
 
     private void handleCancellation() {
-        List<String> myTables = db.getUserReservations(currentUser);
+        // --- NETWORK CALL ---
+        List<String> myTables = client.getUserReservations(currentUser);
 
         if (myTables.isEmpty()) {
             JOptionPane.showMessageDialog(this, "You have no reservations to cancel.");
@@ -270,25 +271,25 @@ public class GUITest extends JFrame {
                 choices, choices[0]);
 
         if (input != null) {
-            db.cancelReservation(input);
+            // --- NETWORK CALL ---
+            client.cancelReservation(input);
             JOptionPane.showMessageDialog(this, "Reservation cancelled.");
         }
     }
 
     // ==========================================
-    // 5. MAKE RESERVATION (DROPDOWN + VISUAL MAP)
+    // 5. MAKE RESERVATION (DROPDOWNS)
     // ==========================================
     private JPanel createReservationScreen() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(OFF_WHITE);
 
         // --- NORTH PANEL: Dropdowns ---
-        // Using GridLayout to organize the menus cleanly
         JPanel selectionPanel = new JPanel(new GridLayout(2, 4, 10, 10));
         selectionPanel.setBackground(OFF_WHITE);
         selectionPanel.setBorder(BorderFactory.createTitledBorder("Reservation Details"));
 
-        // 1. Date Dropdown (Next 7 days)
+        // 1. Date Dropdown
         String[] dates = new String[7];
         LocalDate today = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE, MMM dd");
@@ -297,7 +298,7 @@ public class GUITest extends JFrame {
         }
         dateDropdown = new JComboBox<>(dates);
 
-        // 2. Time Dropdown (5 PM to 10 PM)
+        // 2. Time Dropdown 
         String[] times = {"5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"};
         timeDropdown = new JComboBox<>(times);
 
@@ -305,20 +306,20 @@ public class GUITest extends JFrame {
         String[] sizes = {"1 Person", "2 People", "3 People", "4 People", "5 People", "6+ People"};
         partySizeDropdown = new JComboBox<>(sizes);
         
-        // 4. Table Selection Dropdown
+        // 4. Table Dropdown
         String[] tables = {"Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7", "Table 8", "Table 9"};
         tableDropdown = new JComboBox<>(tables);
 
         JButton checkBtn = createStyledButton("Check Availability", Color.GRAY);
         JButton bookBtn = createStyledButton("Confirm Booking", ITALIAN_GREEN);
         
-        // Row 1: Labels
+        // Add Labels
         selectionPanel.add(new JLabel("Date:"));
         selectionPanel.add(new JLabel("Time:"));
         selectionPanel.add(new JLabel("Party Size:"));
         selectionPanel.add(new JLabel("Select Table:"));
         
-        // Row 2: Components
+        // Add Inputs
         selectionPanel.add(dateDropdown);
         selectionPanel.add(timeDropdown);
         selectionPanel.add(partySizeDropdown);
@@ -331,14 +332,14 @@ public class GUITest extends JFrame {
         tableGridPanel.setBackground(OFF_WHITE);
         tableGridPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // Create 9 "Read Only" indicators (Buttons that don't do anything when clicked)
+        // Create 9 "Read Only" indicators
         for (int i = 1; i <= 9; i++) {
             String tableName = "Table " + i;
             JButton indicator = new JButton(tableName);
             indicator.setFont(new Font("SansSerif", Font.BOLD, 14));
             indicator.setOpaque(true);
             indicator.setBorderPainted(false);
-            indicator.setEnabled(false); // Make them un-clickable (Display Only)
+            indicator.setEnabled(false); // Display Only
             indicator.setBackground(Color.GRAY);
             
             tableIndicators.add(indicator);
@@ -347,7 +348,7 @@ public class GUITest extends JFrame {
 
         panel.add(tableGridPanel, BorderLayout.CENTER);
 
-        // --- SOUTH PANEL: Actions & Back Button ---
+        // --- SOUTH PANEL: Buttons ---
         JPanel bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBackground(OFF_WHITE);
         
@@ -359,57 +360,49 @@ public class GUITest extends JFrame {
         
         panel.add(bottomPanel, BorderLayout.SOUTH);
 
-        // --- ACTION LISTENERS ---
+        // --- ACTIONS ---
 
-        // 1. Back Button
         backBtn.addActionListener(e -> cardLayout.show(mainDeck, "DASHBOARD"));
 
-        // 2. Check Availability (Updates the colors of the map)
         checkBtn.addActionListener(e -> updateAvailabilityMap());
 
-        // 3. Confirm Booking (Uses the dropdown values)
         bookBtn.addActionListener(e -> {
             String selectedDate = (String) dateDropdown.getSelectedItem();
             String selectedTime = (String) timeDropdown.getSelectedItem();
             String selectedParty = (String) partySizeDropdown.getSelectedItem();
             String selectedTable = (String) tableDropdown.getSelectedItem();
             
-            // Construct a unique key for the database: "Date|Time|TableID"
-            String dbKey = selectedDate + "|" + selectedTime + "|" + selectedTable;
-
-            // Attempt Booking
-            boolean success = db.makeReservation(dbKey, currentUser);
+            // --- NETWORK CALL ---
+            boolean success = client.makeReservation(selectedDate, selectedTime, selectedTable, currentUser, selectedParty);
             
             if (success) {
                 JOptionPane.showMessageDialog(this, 
-                    "Confirmed! " + selectedTable + "\n" + selectedDate + " at " + selectedTime + "\n" + selectedParty);
-                updateAvailabilityMap(); // Refresh colors immediately
+                    "Confirmed! " + selectedTable + "\n" + selectedDate + " at " + selectedTime);
+                updateAvailabilityMap(); // Refresh colors
             } else {
                 JOptionPane.showMessageDialog(this, 
-                    "Sorry, " + selectedTable + " is already reserved for that time.\nPlease check the map or pick another time.");
-                updateAvailabilityMap(); // Refresh colors so they see the red box
+                    "Sorry, that table is occupied or invalid.\nPlease check the map.");
+                updateAvailabilityMap(); 
             }
         });
 
         return panel;
     }
 
-    // Helper method to refresh the "Read Only" map
     private void updateAvailabilityMap() {
         String selectedDate = (String) dateDropdown.getSelectedItem();
         String selectedTime = (String) timeDropdown.getSelectedItem();
 
+        // --- NETWORK CALL (Get list of taken tables) ---
+        List<String> takenTables = client.getTakenTables(selectedDate, selectedTime);
+
         for (int i = 0; i < tableIndicators.size(); i++) {
             JButton btn = tableIndicators.get(i);
             String tableName = "Table " + (i + 1);
-            String dbKey = selectedDate + "|" + selectedTime + "|" + tableName;
 
-            // Check if this specific slot is taken
-            if (db.isBooked(dbKey)) {
+            if (takenTables.contains(tableName)) {
                 btn.setBackground(ITALIAN_RED);
                 btn.setText("Occupied");
-                // Note: We leave it disabled so they can't click it, 
-                // but we change the color so they can see it's taken.
             } else {
                 btn.setBackground(ITALIAN_GREEN);
                 btn.setText(tableName);
@@ -432,68 +425,5 @@ public class GUITest extends JFrame {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) { }
         SwingUtilities.invokeLater(GUITest::new);
-    }
-
-    // ==========================================
-    // MOCK DATABASE (Simulating Server Logic)
-    // ==========================================
-    class MockDatabase {
-        private Map<String, String> users = new HashMap<>();
-        
-        // Key format: "Date|Time|TableID" -> Value: "Username"
-        private Map<String, String> reservations = new HashMap<>();
-
-        public MockDatabase() {
-            users.put("admin", "admin");
-        }
-
-        public boolean validateUser(String u, String p) {
-            return users.containsKey(u) && users.get(u).equals(p);
-        }
-
-        public boolean userExists(String u) {
-            return users.containsKey(u);
-        }
-
-        public void addUser(String u, String p) {
-            users.put(u, p);
-        }
-
-        public void deleteUser(String u) {
-            users.remove(u);
-            // Remove all reservations held by this user
-            reservations.values().removeIf(val -> val.equals(u));
-        }
-
-        // --- NEW LOGIC FOR DATE/TIME ---
-
-        public boolean isBooked(String key) {
-            return reservations.containsKey(key);
-        }
-
-        public boolean makeReservation(String key, String user) {
-            if (reservations.containsKey(key)) return false;
-            reservations.put(key, user);
-            return true;
-        }
-
-        public void cancelReservation(String prettyString) {
-             // In a real app you'd parse IDs, but here we just reverse the format
-             String raw = prettyString.replace(" - ", "|");
-             reservations.remove(raw);
-        }
-
-        public List<String> getUserReservations(String user) {
-            List<String> myRes = new ArrayList<>();
-            for (Map.Entry<String, String> entry : reservations.entrySet()) {
-                if (entry.getValue().equals(user)) {
-                    // Convert raw key "Fri, Nov 15|6:00 PM|Table 1" to pretty string
-                    String raw = entry.getKey(); 
-                    String pretty = raw.replace("|", " - ");
-                    myRes.add(pretty);
-                }
-            }
-            return myRes;
-        }
     }
 }
