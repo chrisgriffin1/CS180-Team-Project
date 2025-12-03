@@ -3,7 +3,9 @@
  * @version November 9, 2025
  */
 
-public class Seat implements SeatGuide {
+import java.io.Serializable;
+
+public class Seat implements SeatGuide, Serializable {    
     private User user;
     private boolean isOccupied;
 

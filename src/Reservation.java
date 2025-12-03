@@ -3,8 +3,9 @@
  * @version November 9, 2025
  */
 
-public class Reservation implements ReservationGuide {
-    private String day;
+import java.io.Serializable;
+
+public class Reservation implements ReservationGuide, Serializable {    private String day;
     private double time;
     private Table table;
     private int partySize;

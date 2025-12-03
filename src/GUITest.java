@@ -21,7 +21,7 @@ public class GUITest extends JFrame {
     private String currentUser = null;
     
     // REPLACED MOCK DB WITH NETWORK CLIENT
-    private NetworkClient client = new NetworkClient(); 
+    private Client client = new Client();
 
     // --- COMPONENT REFERENCES ---
     private JComboBox<String> dateDropdown;

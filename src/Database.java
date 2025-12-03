@@ -12,7 +12,6 @@ public class Database implements DatabaseGuide {
     File reservationsFile = new File("reservations.txt");
     File usersFile = new File("users.txt");
 
-
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
 
@@ -21,7 +20,7 @@ public class Database implements DatabaseGuide {
         reservations = readReservations();
     }
 
-    //method creates a new User object given a username and password as input, and adds the new user object to an ArrayList of type User
+    // Creates a new User object given a username and password
     public void makeNewUser(String username, String password) {
         synchronized (lock) {
             User newUser = new User(username, password);
@@ -30,7 +29,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    //method gets a User object given a username as input from the users ArrayList and removes it from the users ArrayList.
+    // Deletes a User object given a username
     public void deleteUser(String username) {
         synchronized (lock) {
             for (int i = 0; i < users.size(); i++) {
@@ -40,11 +39,10 @@ public class Database implements DatabaseGuide {
                 }
             }
             saveUsers();
-         
         }
     }
 
-    //method which creates a new Reservation object given day, time, user, partySize, and table as input and adds the object to the reservations ArrayList 
+    // Creates a new Reservation object
     public void createReservation (String day, double time, User user, int partySize, Table table) {
         synchronized (lock) {
             Reservation reservation = new Reservation(day, time, user, partySize, table);
@@ -53,14 +51,12 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    //method which deletes a Reservation given day, time, user, partySize, and table as input and removes the Reservation object from the reservations ArrayList
+    // Deletes a Reservation
     public void deleteReservation (Reservation reservation) {
         synchronized (lock) {
             reservations.remove(reservation);
             saveReservations();
-        
         }
-        
     }
 
     /**
@@ -75,11 +71,16 @@ public class Database implements DatabaseGuide {
             }
         }
     }
+
     /**
      * Reads users from file
+     * Includes check to prevent FileNotFoundException on first run
      */
     public ArrayList<User> readUsers() {
         synchronized (lock) {
+            if (!usersFile.exists()) {
+                return new ArrayList<User>();
+            }
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
                 return (ArrayList<User>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
@@ -104,9 +105,13 @@ public class Database implements DatabaseGuide {
 
     /**
      * Reads reservations from file
+     * Includes check to prevent FileNotFoundException on first run
      */
     public ArrayList<Reservation> readReservations() {
         synchronized (lock) {
+            if (!reservationsFile.exists()) {
+                return new ArrayList<Reservation>();
+            }
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(reservationsFile))) {
                 return (ArrayList<Reservation>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
@@ -115,6 +120,7 @@ public class Database implements DatabaseGuide {
             return new ArrayList<>();
         }
     }
+
     /**
      * Gets users
      */
@@ -132,6 +138,4 @@ public class Database implements DatabaseGuide {
             return reservations;
         }
     }
-   
-
 }
