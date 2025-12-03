@@ -49,7 +49,15 @@ public class Server implements Runnable {
                         String[] details = command.split(";"); 
                         db.createUser(details[1], details[2]); //passed in username and password into this.
                     } else if (command.contains("Logging in")) {
-                        
+                        String[] loginDetails = command.split(";");
+                        boolean verifyUser = db.validateUser(loginDetails[0], loginDetails[1]);
+                        if (verifyUser) {
+                            writer.println("Good login");
+                            writer.flush();
+                        } else {
+                            writer.println("Bad login");
+                            writer.flush();            
+                        }
 
                     } else if (command.contains("delete user")) {
                         //db.deleteUser();

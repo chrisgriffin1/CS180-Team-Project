@@ -84,10 +84,13 @@ public class Client extends JFrame implements ClientGuide {
                 String response = sendCommand("Logging in", username, password);
                 if ("Invalid command".equals(response)) {
                     JOptionPane.showMessageDialog(this, "Failed to log in.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Logged in successfully.");
-                    createReservationGUI();
+                } 
+                
+                if ("Good login".equals(response)) {
+                   JOptionPane.showMessageDialog(this, "Logged in successfully.");
+                    createReservationGUI(); 
                 }
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }
