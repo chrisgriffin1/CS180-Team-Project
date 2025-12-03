@@ -83,9 +83,9 @@ public class Client extends JFrame implements ClientGuide {
             if (!username.isEmpty() && !password.isEmpty()) {                
                 String response = sendCommand("Logging in", username, password);
                 if ("Invalid command".equals(response)) {
-                    JOptionPane.showMessageDialog(this, "Failed to create user.");
+                    JOptionPane.showMessageDialog(this, "Failed to log in.");
                 } else {
-                    JOptionPane.showMessageDialog(this, "User created successfully.");
+                    JOptionPane.showMessageDialog(this, "Logged in successfully.");
                     createReservationGUI();
                 }
             } else {
