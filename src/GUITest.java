@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ public class GUITest extends JFrame {
     private final Color ITALIAN_GREEN = new Color(0, 140, 69);
     private final Color ITALIAN_RED = new Color(205, 33, 42);
     private final Color OFF_WHITE = new Color(236, 204, 162);
+    private final Color DARK_TEXT = new Color(50, 50, 50);
 
     // --- NAVIGATION ---
     private JPanel mainDeck;
@@ -20,9 +23,17 @@ public class GUITest extends JFrame {
     private String currentUser = null;
     private MockDatabase db = new MockDatabase();
 
+    // --- COMPONENT REFERENCES (For dynamic updates) ---
+    private JComboBox<String> dateDropdown;
+    private JComboBox<String> timeDropdown;
+    private JComboBox<String> partySizeDropdown;
+    private JComboBox<String> tableDropdown; // The specific table selector
+    private JPanel tableGridPanel;
+    private List<JButton> tableIndicators = new ArrayList<>(); // Read-only visual map
+
     public GUITest() {
         super("Aiden's Pizzeria - Reservation System");
-        setSize(700, 500);
+        setSize(850, 650); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -59,7 +70,6 @@ public class GUITest extends JFrame {
         JButton loginBtn = createStyledButton("Login", ITALIAN_GREEN);
         JButton createBtn = createStyledButton("Create an Account", ITALIAN_RED);
 
-        // Layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0; gbc.gridy = 0;
@@ -74,7 +84,6 @@ public class GUITest extends JFrame {
         gbc.gridy = 3; gbc.insets = new Insets(10, 10, 10, 10);
         panel.add(createBtn, gbc);
 
-        // Actions
         loginBtn.addActionListener(e -> cardLayout.show(mainDeck, "LOGIN"));
         createBtn.addActionListener(e -> cardLayout.show(mainDeck, "CREATE_ACCOUNT"));
 
@@ -90,13 +99,13 @@ public class GUITest extends JFrame {
 
         JLabel header = new JLabel("Benvenuto! Please Login.");
         header.setFont(new Font("Serif", Font.BOLD, 24));
+        header.setForeground(DARK_TEXT);
 
         JTextField userField = new JTextField(15);
         JPasswordField passField = new JPasswordField(15);
         JButton submitBtn = createStyledButton("Enter", ITALIAN_GREEN);
         JButton backBtn = createStyledButton("Back", Color.GRAY);
 
-        // Layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.gridx = 0; gbc.gridy = 0;
@@ -109,14 +118,13 @@ public class GUITest extends JFrame {
         gbc.gridy = 5; panel.add(submitBtn, gbc);
         gbc.gridy = 6; panel.add(backBtn, gbc);
 
-        // Actions
         submitBtn.addActionListener(e -> {
             String u = userField.getText();
             String p = new String(passField.getPassword());
             if (db.validateUser(u, p)) {
                 currentUser = u;
-                passField.setText(""); // Clear password
-                refreshDashboard(); // Update dashboard with user name
+                passField.setText("");
+                refreshDashboard();
                 cardLayout.show(mainDeck, "DASHBOARD");
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password!");
@@ -124,13 +132,13 @@ public class GUITest extends JFrame {
         });
 
         backBtn.addActionListener(e -> cardLayout.show(mainDeck, "WELCOME"));
-
         return panel;
     }
 
     // ==========================================
     // 3. CREATE ACCOUNT SCREEN
     // ==========================================
+
     private JPanel createCreateAccountScreen() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(OFF_WHITE);
@@ -156,7 +164,6 @@ public class GUITest extends JFrame {
         gbc.gridy = 5; panel.add(createBtn, gbc);
         gbc.gridy = 6; panel.add(backBtn, gbc);
 
-        // Actions
         createBtn.addActionListener(e -> {
             String u = userField.getText();
             String p = new String(passField.getPassword());
@@ -178,29 +185,28 @@ public class GUITest extends JFrame {
         });
 
         backBtn.addActionListener(e -> cardLayout.show(mainDeck, "WELCOME"));
-
         return panel;
     }
 
     // ==========================================
-    // 4. DASHBOARD (The 3 Options)
+    // 4. DASHBOARD
     // ==========================================
-    private JPanel dashboardPanel; // Keep reference to update text
+    
     private JLabel welcomeLabel;
 
     private JPanel createDashboardScreen() {
-        dashboardPanel = new JPanel(new GridBagLayout());
+        JPanel dashboardPanel = new JPanel(new GridBagLayout());
         dashboardPanel.setBackground(OFF_WHITE);
 
         welcomeLabel = new JLabel("Ciao, User!");
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 30));
+        welcomeLabel.setForeground(DARK_TEXT);
 
         JButton makeResBtn = createStyledButton("Make Reservation", ITALIAN_GREEN);
         JButton cancelResBtn = createStyledButton("Cancel Reservation", Color.ORANGE);
         JButton deleteAccBtn = createStyledButton("Delete Account", ITALIAN_RED);
         JButton logoutBtn = createStyledButton("Logout", Color.BLACK);
 
-        // Bigger Buttons for the Dashboard
         Dimension bigBtnSize = new Dimension(250, 50);
         makeResBtn.setPreferredSize(bigBtnSize);
         cancelResBtn.setPreferredSize(bigBtnSize);
@@ -216,15 +222,13 @@ public class GUITest extends JFrame {
         gbc.gridy = 3; dashboardPanel.add(deleteAccBtn, gbc);
         gbc.gridy = 4; dashboardPanel.add(logoutBtn, gbc);
 
-        // --- DASHBOARD ACTIONS ---
+        makeResBtn.addActionListener(e -> {
+            updateAvailabilityMap(); // Refresh map when entering
+            cardLayout.show(mainDeck, "MAKE_RESERVATION");
+        });
 
-        // 1. Make Reservation -> Go to Table Map
-        makeResBtn.addActionListener(e -> cardLayout.show(mainDeck, "MAKE_RESERVATION"));
-
-        // 2. Cancel Reservation -> Pop up a list of user's tables
         cancelResBtn.addActionListener(e -> handleCancellation());
 
-        // 3. Delete Account
         deleteAccBtn.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Are you sure you want to leave the family?",
@@ -238,7 +242,6 @@ public class GUITest extends JFrame {
             }
         });
 
-        // 4. Logout
         logoutBtn.addActionListener(e -> {
             currentUser = null;
             cardLayout.show(mainDeck, "WELCOME");
@@ -247,13 +250,11 @@ public class GUITest extends JFrame {
         return dashboardPanel;
     }
 
-    // Helper to update the welcome text when user logs in
     private void refreshDashboard() {
         welcomeLabel.setText("Ciao, " + currentUser + "!");
     }
 
     private void handleCancellation() {
-        // Get list of tables booked by current user
         List<String> myTables = db.getUserReservations(currentUser);
 
         if (myTables.isEmpty()) {
@@ -261,7 +262,6 @@ public class GUITest extends JFrame {
             return;
         }
 
-        // Show simple dialog to pick one
         String[] choices = myTables.toArray(new String[0]);
         String input = (String) JOptionPane.showInputDialog(this,
                 "Which reservation would you like to cancel?",
@@ -271,56 +271,153 @@ public class GUITest extends JFrame {
 
         if (input != null) {
             db.cancelReservation(input);
-            JOptionPane.showMessageDialog(this, "Reservation for " + input + " cancelled.");
+            JOptionPane.showMessageDialog(this, "Reservation cancelled.");
         }
     }
 
     // ==========================================
-    // 5. MAKE RESERVATION (Table Map)
+    // 5. MAKE RESERVATION (DROPDOWN + VISUAL MAP)
     // ==========================================
     private JPanel createReservationScreen() {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(OFF_WHITE);
 
-        JLabel header = new JLabel("Select Your Table", SwingConstants.CENTER);
-        header.setFont(new Font("Serif", Font.BOLD, 24));
-        header.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        panel.add(header, BorderLayout.NORTH);
+        // --- NORTH PANEL: Dropdowns ---
+        // Using GridLayout to organize the menus cleanly
+        JPanel selectionPanel = new JPanel(new GridLayout(2, 4, 10, 10));
+        selectionPanel.setBackground(OFF_WHITE);
+        selectionPanel.setBorder(BorderFactory.createTitledBorder("Reservation Details"));
 
-        JPanel grid = new JPanel(new GridLayout(3, 3, 10, 10));
-        grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // 1. Date Dropdown (Next 7 days)
+        String[] dates = new String[7];
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE, MMM dd");
+        for(int i=0; i<7; i++) {
+            dates[i] = today.plusDays(i).format(dtf);
+        }
+        dateDropdown = new JComboBox<>(dates);
 
-        // Create 9 tables
+        // 2. Time Dropdown (5 PM to 10 PM)
+        String[] times = {"5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"};
+        timeDropdown = new JComboBox<>(times);
+
+        // 3. Party Size Dropdown
+        String[] sizes = {"1 Person", "2 People", "3 People", "4 People", "5 People", "6+ People"};
+        partySizeDropdown = new JComboBox<>(sizes);
+        
+        // 4. Table Selection Dropdown
+        String[] tables = {"Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7", "Table 8", "Table 9"};
+        tableDropdown = new JComboBox<>(tables);
+
+        JButton checkBtn = createStyledButton("Check Availability", Color.GRAY);
+        JButton bookBtn = createStyledButton("Confirm Booking", ITALIAN_GREEN);
+        
+        // Row 1: Labels
+        selectionPanel.add(new JLabel("Date:"));
+        selectionPanel.add(new JLabel("Time:"));
+        selectionPanel.add(new JLabel("Party Size:"));
+        selectionPanel.add(new JLabel("Select Table:"));
+        
+        // Row 2: Components
+        selectionPanel.add(dateDropdown);
+        selectionPanel.add(timeDropdown);
+        selectionPanel.add(partySizeDropdown);
+        selectionPanel.add(tableDropdown);
+
+        panel.add(selectionPanel, BorderLayout.NORTH);
+
+        // --- CENTER PANEL: Visual Map (Read Only) ---
+        tableGridPanel = new JPanel(new GridLayout(3, 3, 15, 15));
+        tableGridPanel.setBackground(OFF_WHITE);
+        tableGridPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        // Create 9 "Read Only" indicators (Buttons that don't do anything when clicked)
         for (int i = 1; i <= 9; i++) {
             String tableName = "Table " + i;
-            JButton tblBtn = new JButton(tableName);
-            tblBtn.setBackground(ITALIAN_GREEN);
-            tblBtn.setForeground(Color.WHITE);
-            tblBtn.setOpaque(true);
-            tblBtn.setBorderPainted(false);
-
-            tblBtn.addActionListener(e -> {
-                boolean success = db.makeReservation(tableName, currentUser);
-                if (success) {
-                    tblBtn.setBackground(ITALIAN_RED);
-                    tblBtn.setText("Booked!");
-                    JOptionPane.showMessageDialog(this, "You booked " + tableName);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Already booked!");
-                }
-            });
-            grid.add(tblBtn);
+            JButton indicator = new JButton(tableName);
+            indicator.setFont(new Font("SansSerif", Font.BOLD, 14));
+            indicator.setOpaque(true);
+            indicator.setBorderPainted(false);
+            indicator.setEnabled(false); // Make them un-clickable (Display Only)
+            indicator.setBackground(Color.GRAY);
+            
+            tableIndicators.add(indicator);
+            tableGridPanel.add(indicator);
         }
 
-        panel.add(grid, BorderLayout.CENTER);
+        panel.add(tableGridPanel, BorderLayout.CENTER);
 
+        // --- SOUTH PANEL: Actions & Back Button ---
+        JPanel bottomPanel = new JPanel(new FlowLayout());
+        bottomPanel.setBackground(OFF_WHITE);
+        
         JButton backBtn = createStyledButton("Back to Dashboard", Color.BLACK);
+        
+        bottomPanel.add(checkBtn);
+        bottomPanel.add(bookBtn);
+        bottomPanel.add(backBtn);
+        
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        // --- ACTION LISTENERS ---
+
+        // 1. Back Button
         backBtn.addActionListener(e -> cardLayout.show(mainDeck, "DASHBOARD"));
-        panel.add(backBtn, BorderLayout.SOUTH);
+
+        // 2. Check Availability (Updates the colors of the map)
+        checkBtn.addActionListener(e -> updateAvailabilityMap());
+
+        // 3. Confirm Booking (Uses the dropdown values)
+        bookBtn.addActionListener(e -> {
+            String selectedDate = (String) dateDropdown.getSelectedItem();
+            String selectedTime = (String) timeDropdown.getSelectedItem();
+            String selectedParty = (String) partySizeDropdown.getSelectedItem();
+            String selectedTable = (String) tableDropdown.getSelectedItem();
+            
+            // Construct a unique key for the database: "Date|Time|TableID"
+            String dbKey = selectedDate + "|" + selectedTime + "|" + selectedTable;
+
+            // Attempt Booking
+            boolean success = db.makeReservation(dbKey, currentUser);
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this, 
+                    "Confirmed! " + selectedTable + "\n" + selectedDate + " at " + selectedTime + "\n" + selectedParty);
+                updateAvailabilityMap(); // Refresh colors immediately
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Sorry, " + selectedTable + " is already reserved for that time.\nPlease check the map or pick another time.");
+                updateAvailabilityMap(); // Refresh colors so they see the red box
+            }
+        });
 
         return panel;
     }
 
-    // Helper for pretty buttons
+    // Helper method to refresh the "Read Only" map
+    private void updateAvailabilityMap() {
+        String selectedDate = (String) dateDropdown.getSelectedItem();
+        String selectedTime = (String) timeDropdown.getSelectedItem();
+
+        for (int i = 0; i < tableIndicators.size(); i++) {
+            JButton btn = tableIndicators.get(i);
+            String tableName = "Table " + (i + 1);
+            String dbKey = selectedDate + "|" + selectedTime + "|" + tableName;
+
+            // Check if this specific slot is taken
+            if (db.isBooked(dbKey)) {
+                btn.setBackground(ITALIAN_RED);
+                btn.setText("Occupied");
+                // Note: We leave it disabled so they can't click it, 
+                // but we change the color so they can see it's taken.
+            } else {
+                btn.setBackground(ITALIAN_GREEN);
+                btn.setText(tableName);
+            }
+        }
+        tableGridPanel.repaint();
+    }
+
     private JButton createStyledButton(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setBackground(bg);
@@ -332,23 +429,21 @@ public class GUITest extends JFrame {
 
     public static void main(String[] args) {
         try {
-            // Make it look like the native OS (smoother on Mac/Windows)
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) { }
         SwingUtilities.invokeLater(GUITest::new);
     }
 
     // ==========================================
-    // MOCK DATABASE (The "Backend")
+    // MOCK DATABASE (Simulating Server Logic)
     // ==========================================
     class MockDatabase {
-        // Username -> Password
         private Map<String, String> users = new HashMap<>();
-        // TableName -> Username
+        
+        // Key format: "Date|Time|TableID" -> Value: "Username"
         private Map<String, String> reservations = new HashMap<>();
 
         public MockDatabase() {
-            // Add a dummy admin user
             users.put("admin", "admin");
         }
 
@@ -366,25 +461,36 @@ public class GUITest extends JFrame {
 
         public void deleteUser(String u) {
             users.remove(u);
-            // Also cancel all their reservations
+            // Remove all reservations held by this user
             reservations.values().removeIf(val -> val.equals(u));
         }
 
-        public boolean makeReservation(String table, String user) {
-            if (reservations.containsKey(table)) return false;
-            reservations.put(table, user);
+        // --- NEW LOGIC FOR DATE/TIME ---
+
+        public boolean isBooked(String key) {
+            return reservations.containsKey(key);
+        }
+
+        public boolean makeReservation(String key, String user) {
+            if (reservations.containsKey(key)) return false;
+            reservations.put(key, user);
             return true;
         }
 
-        public void cancelReservation(String table) {
-            reservations.remove(table);
+        public void cancelReservation(String prettyString) {
+             // In a real app you'd parse IDs, but here we just reverse the format
+             String raw = prettyString.replace(" - ", "|");
+             reservations.remove(raw);
         }
 
         public List<String> getUserReservations(String user) {
             List<String> myRes = new ArrayList<>();
             for (Map.Entry<String, String> entry : reservations.entrySet()) {
                 if (entry.getValue().equals(user)) {
-                    myRes.add(entry.getKey());
+                    // Convert raw key "Fri, Nov 15|6:00 PM|Table 1" to pretty string
+                    String raw = entry.getKey(); 
+                    String pretty = raw.replace("|", " - ");
+                    myRes.add(pretty);
                 }
             }
             return myRes;
