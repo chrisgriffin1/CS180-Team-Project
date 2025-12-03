@@ -7,7 +7,7 @@ public class Client extends JFrame implements ClientGuide {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JButton createButton;
+    private JButton submitButton;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -66,18 +66,18 @@ public class Client extends JFrame implements ClientGuide {
         passLabel.setForeground(Color.WHITE);
         passwordField = new JPasswordField(15);
 
-        createButton = new JButton("Create");
+        submitButton = new JButton("Submit");
 
         panel.add(title);
         panel.add(userLabel);
         panel.add(usernameField);
         panel.add(passLabel);
         panel.add(passwordField);
-        panel.add(createButton);
+        panel.add(submitButton);
 
         add(panel);
 
-        createButton.addActionListener(e -> {
+        submitButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (!username.isEmpty() && !password.isEmpty()) {
@@ -116,18 +116,18 @@ public class Client extends JFrame implements ClientGuide {
         passLabel.setForeground(Color.WHITE);
         passwordField = new JPasswordField(15);
 
-        createButton = new JButton("Create");
-
+        submitButton = new JButton("Submit");
+        
         panel.add(title);
         panel.add(userLabel);
         panel.add(usernameField);
         panel.add(passLabel);
         panel.add(passwordField);
-        panel.add(createButton);
+        panel.add(submitButton);
 
         add(panel);
 
-        createButton.addActionListener(e -> {
+        submitButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (!username.isEmpty() && !password.isEmpty()) {

@@ -43,9 +43,10 @@ public class Server implements Runnable {
                     // "new reservation;day time username partySize tableRow tableColumn"
 
                     // delete reservation command are in the format
-
-
-
+                    String[] details = command.split(";"); 
+                    boolean verifyLogin = db.validateUser(details[1], details[2]); //pass in username and password into this.            
+                    
+                
                     if (command.contains("new user")) {
                         String[] data = command.split(";");
 
