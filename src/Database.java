@@ -150,8 +150,26 @@ public class Database implements DatabaseGuide {
         return false;
 
     }
-   
 
+    //Note: returns true if account successfully created, if not false
+    public boolean createUser(String username, String password) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("users.ser"));
+             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.ser"))) {
+            ArrayList<User> readUser = (ArrayList<User>) ois.readObject();
+            for (User entry : readUser) {
+                if (entry.getUserName().equals(username)) {
+                    return false;
+                }
+            }
+            User newUser = new User(username, password);
+            oos.writeObject(newUser);
+            return true;
+        } catch (Exception ie) {
+            ie.printStackTrace();
+        }
+        return false;
+    }
+   
 
 
 }
