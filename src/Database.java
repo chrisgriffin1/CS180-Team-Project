@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class Database implements DatabaseGuide {
 
     public static Object lock = new Object();
-    File reservationsFile = new File("reservations.txt");
-    File usersFile = new File("users.txt");
+    File reservationsFile = new File("reservations.ser");
+    File usersFile = new File("users.ser");
 
 
     ArrayList<User> users;
@@ -132,6 +132,26 @@ public class Database implements DatabaseGuide {
             return reservations;
         }
     }
+
+    public boolean validateUser(String username, String password) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("users.ser"))) {
+            ArrayList<User> readUser = (ArrayList<User>) ois.readObject();
+            for (User entry : readUser) {
+                if (entry.getUserName().equals(username) && entry.getPassword().equals(password)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            
+        } catch (Exception ie) {
+            ie.printStackTrace();
+        }
+        return false;
+
+    }
    
+
+
 
 }
