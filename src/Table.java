@@ -1,9 +1,12 @@
+
 /**
  * @author Ishaan Limaye, Jaden Fang, Aiden Prananta, Christopher Griffin
  * @version November 9, 2025
  */
 
-public class Table implements TableGuide {
+import java.io.Serializable;
+
+public class Table implements TableGuide, Serializable {
     private int tableRow;
     private int tableColumn;
     private Seat[] seats;
@@ -19,8 +22,9 @@ public class Table implements TableGuide {
         for (int i = 0; i < capacity; i++) {
             this.seats[i] = new Seat(null);
         }
-        this.price = price; 
+        this.price = price;
     }
+
     // Gets table row
     public int getTableRow() {
         return tableRow;
@@ -42,10 +46,10 @@ public class Table implements TableGuide {
     }
 
     /*
-    public void occupySeats(Seat seat) {
-        for (int a = 0; a < seats.length; a++) {
-            seats[a] = seat;
-        }
-    }
-    */
+     * public void occupySeats(Seat seat) {
+     * for (int a = 0; a < seats.length; a++) {
+     * seats[a] = seat;
+     * }
+     * }
+     */
 }
