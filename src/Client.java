@@ -80,8 +80,8 @@ public class Client extends JFrame implements ClientGuide {
         submitButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            if (!username.isEmpty() && !password.isEmpty()) {
-                String response = sendCommand("New user", username, password);
+            if (!username.isEmpty() && !password.isEmpty()) {                
+                String response = sendCommand("Logging in", username, password);
                 if ("Invalid command".equals(response)) {
                     JOptionPane.showMessageDialog(this, "Failed to create user.");
                 } else {
@@ -147,6 +147,7 @@ public class Client extends JFrame implements ClientGuide {
         setVisible(true);
     }
 
+    //sendCommand method below is going to return a string with result of logging in/creating new user, etc.
     public String sendCommand(String command, String... params) {
         try {
             String cmd = command + ";" + String.join(" ", params);

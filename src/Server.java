@@ -43,16 +43,14 @@ public class Server implements Runnable {
                     // "new reservation;day time username partySize tableRow tableColumn"
 
                     // delete reservation command are in the format
-                    String[] details = command.split(";"); 
-                    boolean verifyLogin = db.validateUser(details[1], details[2]); //pass in username and password into this.            
-                    
-                
+
+
                     if (command.contains("new user")) {
-                        String[] data = command.split(";");
+                        String[] details = command.split(";"); 
+                        db.createUser(details[1], details[2]); //passed in username and password into this.
+                    } else if (command.contains("Logging in")) {
+                        
 
-                        ArrayList<User> validUsers = db.getUsers();
-
-                        db.makeNewUser(data[1], data[2]);
                     } else if (command.contains("delete user")) {
                         //db.deleteUser();
                     } else if (command.contains("new reservation")) {
@@ -61,6 +59,7 @@ public class Server implements Runnable {
                         // db.deleteReservation();
                     } else {
                         writer.println("Invalid command");
+                        writer.flush();
                     }
 
                     
