@@ -3,7 +3,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.*;
 
-public class Client extends JFrame implements ClientGuide{
+public class Client extends JFrame implements ClientGuide {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -37,6 +37,10 @@ public class Client extends JFrame implements ClientGuide{
             } else {
                 setupGUI(); 
             }
+
+            
+
+            
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to connect to server: " + e.getMessage(),
@@ -82,10 +86,13 @@ public class Client extends JFrame implements ClientGuide{
                     JOptionPane.showMessageDialog(this, "Failed to create user.");
                 } else {
                     JOptionPane.showMessageDialog(this, "User created successfully.");
+                    createReservationGUI();
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }
+
+            dispose();
         });
 
         setVisible(true);
@@ -129,10 +136,12 @@ public class Client extends JFrame implements ClientGuide{
                     JOptionPane.showMessageDialog(this, "Failed to create user.");
                 } else {
                     JOptionPane.showMessageDialog(this, "User created successfully.");
+                    createReservationGUI();
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }
+            dispose();
         });
 
         setVisible(true);
@@ -147,6 +156,27 @@ public class Client extends JFrame implements ClientGuide{
         } catch (IOException e) {
             return "Error";
         }
+    }
+
+    public void createReservationGUI() {
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2));
+            inputPanel.add(new JLabel("Date:"));
+            JComboBox<String> dateCombo = new JComboBox<>(new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"});
+            inputPanel.add(dateCombo);
+            inputPanel.add(new JLabel("Time:"));
+            JComboBox<String> timeCombo = new JComboBox<>(new String[]{"18:00", "19:00", "20:00", "21:00"});
+            inputPanel.add(timeCombo);
+            inputPanel.add(new JLabel("Party Size:"));
+            JComboBox<Integer> partyCombo = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
+            inputPanel.add(partyCombo);
+            int result = JOptionPane.showConfirmDialog(null, inputPanel, "Enter Reservation Details", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                String selectedDate = (String) dateCombo.getSelectedItem();
+                String selectedTime = (String) timeCombo.getSelectedItem();
+                int selectedParty = (Integer) partyCombo.getSelectedItem();
+                // TODO: Use these values, e.g., send to server for reservation
+                JOptionPane.showMessageDialog(null, "Reservation for " + selectedDate + " at " + selectedTime + " for " + selectedParty + " people.");
+            }
     }
 
     public static void main(String[] args) {
