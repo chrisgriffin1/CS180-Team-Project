@@ -90,7 +90,12 @@ public class Client extends JFrame implements ClientGuide {
                    JOptionPane.showMessageDialog(this, "Logged in successfully.");
                     createReservationGUI(); 
                 }
+
+                if ("Bad login".equals(response)) {
+                   JOptionPane.showMessageDialog(this, "Log in was unsuccessful.");
+                }
                 
+
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }
@@ -137,10 +142,17 @@ public class Client extends JFrame implements ClientGuide {
                 String response = sendCommand("New user", username, password);
                 if ("Invalid command".equals(response)) {
                     JOptionPane.showMessageDialog(this, "Failed to create user.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "User created successfully.");
-                    createReservationGUI();
+                } 
+
+                if ("Good user created".equals(response)) {
+                    JOptionPane.showMessageDialog(this, "User created successfully");
+                    createReservationGUI(); 
+                } 
+
+                if ("Bad user created".equals(response)) {
+                    JOptionPane.showMessageDialog(this, "User creation was unsuccessful.");
                 }
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }

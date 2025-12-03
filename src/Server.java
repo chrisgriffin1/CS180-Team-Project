@@ -47,7 +47,15 @@ public class Server implements Runnable {
 
                     if (command.contains("new user")) {
                         String[] details = command.split(";"); 
-                        db.createUser(details[1], details[2]); //passed in username and password into this.
+                        boolean userCreated = db.createUser(details[1], details[2]); //passed in username and password into this.
+                        if (userCreated) {
+                            writer.println("Good user created");
+                            writer.flush();
+                        } else {
+                            writer.println("Bad user created");
+                            writer.flush();            
+                        }       
+
                     } else if (command.contains("Logging in")) {
                         String[] loginDetails = command.split(";");
                         boolean verifyUser = db.validateUser(loginDetails[0], loginDetails[1]);
