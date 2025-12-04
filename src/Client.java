@@ -25,7 +25,7 @@ public class Client extends JFrame implements ClientGuide {
     private JComboBox<String> tableBox;
     private JPanel grid;
     private List<JButton> buttons = new ArrayList<>();
-
+    
     private JLabel welcomeText;
 
     public Client() {
