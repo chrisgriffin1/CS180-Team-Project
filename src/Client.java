@@ -14,7 +14,6 @@ public class Client extends JFrame implements ClientGuide {
 
     private String user = null;
 
-    // Client-side socket fields
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
@@ -28,6 +27,7 @@ public class Client extends JFrame implements ClientGuide {
 
     private JLabel welcomeText;
 
+    // Constructor initializes the GUI components and connects to the server
     public Client() {
         super("Boiler bookings");
         setSize(850, 650);
@@ -57,6 +57,7 @@ public class Client extends JFrame implements ClientGuide {
         setVisible(true);
     }
 
+    // Switches the view to the login screen
     @Override
     public void loginGUI() {
         if (cl != null && cards != null) {
@@ -64,6 +65,7 @@ public class Client extends JFrame implements ClientGuide {
         }
     }
 
+    // Switches the view to the account creation screen
     @Override
     public void setupGUI() {
         if (cl != null && cards != null) {
@@ -71,6 +73,7 @@ public class Client extends JFrame implements ClientGuide {
         }
     }
 
+    // Sends a command to the server and returns the response
     @Override
     public String sendCommand(String command, String... params) {
         if (writer != null && reader != null) {
@@ -88,6 +91,7 @@ public class Client extends JFrame implements ClientGuide {
         return "Error: No Connection";
     }
 
+    // Creates the welcome panel with options to login or create an account
     private JPanel welcome() {
         JPanel p = new JPanel(new GridBagLayout());
 
@@ -118,6 +122,7 @@ public class Client extends JFrame implements ClientGuide {
         return p;
     }
 
+    // Creates the login panel for user login
     private JPanel login() {
         JPanel p = new JPanel(new GridBagLayout());
 
@@ -164,6 +169,7 @@ public class Client extends JFrame implements ClientGuide {
         return p;
     }
 
+    // Creates the account creation screen
     private JPanel createAccount() {
         JPanel p = new JPanel(new GridBagLayout());
 
@@ -220,6 +226,7 @@ public class Client extends JFrame implements ClientGuide {
         return p;
     }
 
+    // Creates the dashboard screen user options
     private JPanel dashboard() {
         JPanel p = new JPanel(new GridBagLayout());
 
@@ -279,10 +286,12 @@ public class Client extends JFrame implements ClientGuide {
         return p;
     }
 
+    // Updates the welcome text with the current username
     private void refresh() {
         welcomeText.setText("Hello, " + user + "!");
     }
 
+    // cancels reservation logic
     private void cancel() {
         List<String> list = getReservations(user);
 
@@ -304,6 +313,7 @@ public class Client extends JFrame implements ClientGuide {
         }
     }
 
+    // Creates the reservation panel with table selection and map
     private JPanel reservation() {
         JPanel p = new JPanel(new BorderLayout());
 
@@ -328,7 +338,6 @@ public class Client extends JFrame implements ClientGuide {
                 "Table 9" };
         tableBox = new JComboBox<>(tables);
 
-        // Removed Check Availability button
         JButton b2 = new JButton("Confirm Booking");
 
         top.add(new JLabel("Date:"));
@@ -368,7 +377,6 @@ public class Client extends JFrame implements ClientGuide {
 
         b3.addActionListener(e -> cl.show(cards, "DASHBOARD"));
 
-        // Auto-update map when date or time changes
         dateBox.addActionListener(e -> updateMap());
         timeBox.addActionListener(e -> updateMap());
 
@@ -398,6 +406,7 @@ public class Client extends JFrame implements ClientGuide {
         return p;
     }
 
+    // Updates the visual map to show table availability
     private void updateMap() {
         String d = (String) dateBox.getSelectedItem();
         String t = (String) timeBox.getSelectedItem();
@@ -422,46 +431,49 @@ public class Client extends JFrame implements ClientGuide {
         SwingUtilities.invokeLater(Client::new);
     }
 
-    // --- NETWORK HELPER METHODS ---
-
+    // Checks if the user credentials are valid
     private boolean checkUser(String u, String p) {
         String resp = sendCommand("LOGIN", u, p);
         return "true".equals(resp);
     }
 
+    // Checks if a username is already taken
     private boolean checkUsername(String u) {
         String resp = sendCommand("CHECK_USER", u);
         return "true".equals(resp);
     }
 
+    // Creates a new user account
     private boolean makeNewUser(String u, String p) {
         String resp = sendCommand("CREATE_USER", u, p);
         return "true".equals(resp);
     }
 
+    // Deletes a user account
     private void deleteUser(String u) {
         sendCommand("DELETE_USER", u);
     }
 
+    // Checks if a specific table is booked at a given time
     private boolean checkBooked(String key) {
         String resp = sendCommand("IS_BOOKED", key);
         return "true".equals(resp);
     }
 
+    // tries to book a reservation
     private boolean book(String key, String user, String size) {
-        // size: "2 People" -> "2"
         String num = size.split(" ")[0];
         String resp = sendCommand("MAKE_RESERVATION", key, user, num);
         return "true".equals(resp);
     }
 
+    // Cancels a reservation
     private void cancel(String prettyString) {
         sendCommand("CANCEL_RESERVATION", prettyString);
     }
 
+    // Retrieves a list of reservations for the current user
     private List<String> getReservations(String user) {
-        // We need to parse the raw data from server and convert to pretty strings
-        // Server returns: day,time,username,partySize,tableRow,tableCol;...
         String resp = sendCommand("GET_RESERVATIONS");
         List<String> list = new ArrayList<>();
         if (resp != null && !resp.isEmpty() && !resp.equals("false")) {
@@ -487,6 +499,7 @@ public class Client extends JFrame implements ClientGuide {
         return list;
     }
 
+    // Converts a double time value to a formatted string
     private String toTime(double d) {
         int h = (int) d;
         int m = (int) Math.round((d - h) * 60);

@@ -16,11 +16,13 @@ public class Database implements DatabaseGuide {
     ArrayList<User> users;
     ArrayList<Reservation> reservations;
 
+    // Constructor that initializes the database by reading users and reservations
     public Database() {
         users = readUsers();
         reservations = readReservations();
     }
 
+    // Starts the server and listens for client connections
     public void run() {
         ServerSocket serverSocket = null;
         try {
@@ -42,6 +44,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
+    // Handles individual client connections and processes commands
     private void handleClient(Socket socket) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
@@ -53,7 +56,6 @@ public class Database implements DatabaseGuide {
                 String command = parts[0];
 
                 if (command.equals("LOGIN")) {
-                    // LOGIN;username;password
                     if (parts.length < 3) {
                         writer.println("false");
                         continue;
@@ -62,7 +64,7 @@ public class Database implements DatabaseGuide {
                     String p = parts[2];
                     boolean valid = false;
                     synchronized (lock) {
-                        users = readUsers(); // Refresh
+                        users = readUsers();
                         for (User user : users) {
                             if (user.getUserName().equals(u) && user.getPassword().equals(p)) {
                                 valid = true;
@@ -73,7 +75,6 @@ public class Database implements DatabaseGuide {
                     writer.println(valid ? "true" : "false");
 
                 } else if (command.equals("CHECK_USER")) {
-                    // CHECK_USER;username
                     if (parts.length < 2) {
                         writer.println("false");
                         continue;
@@ -81,7 +82,7 @@ public class Database implements DatabaseGuide {
                     String u = parts[1];
                     boolean exists = false;
                     synchronized (lock) {
-                        users = readUsers(); // Refresh
+                        users = readUsers();
                         for (User user : users) {
                             if (user.getUserName().equals(u)) {
                                 exists = true;
@@ -92,7 +93,6 @@ public class Database implements DatabaseGuide {
                     writer.println(exists ? "true" : "false");
 
                 } else if (command.equals("CREATE_USER")) {
-                    // CREATE_USER;username;password
                     if (parts.length < 3) {
                         writer.println("false");
                         continue;
@@ -103,14 +103,12 @@ public class Database implements DatabaseGuide {
                     writer.println("true");
 
                 } else if (command.equals("DELETE_USER")) {
-                    // DELETE_USER;username
                     if (parts.length < 2) {
                         writer.println("false");
                         continue;
                     }
                     String u = parts[1];
                     deleteUser(u);
-                    // Also delete reservations for this user
                     synchronized (lock) {
                         reservations = readReservations();
                         ArrayList<Reservation> toRemove = new ArrayList<>();
@@ -126,7 +124,6 @@ public class Database implements DatabaseGuide {
                     writer.println("true");
 
                 } else if (command.equals("IS_BOOKED")) {
-                    // IS_BOOKED;key (Date|Time|TableID)
                     if (parts.length < 2) {
                         writer.println("false");
                         continue;
@@ -159,7 +156,6 @@ public class Database implements DatabaseGuide {
                     writer.println(booked ? "true" : "false");
 
                 } else if (command.equals("MAKE_RESERVATION")) {
-                    // MAKE_RESERVATION;key;username;partySize
                     if (parts.length < 4) {
                         writer.println("false");
                         continue;
@@ -222,7 +218,6 @@ public class Database implements DatabaseGuide {
                     }
 
                 } else if (command.equals("CANCEL_RESERVATION")) {
-                    // CANCEL_RESERVATION;prettyString
                     if (parts.length < 2) {
                         writer.println("false");
                         continue;
@@ -263,7 +258,6 @@ public class Database implements DatabaseGuide {
                     }
 
                 } else if (command.equals("GET_RESERVATIONS")) {
-                    // GET_RESERVATIONS
                     StringBuilder sb = new StringBuilder();
                     synchronized (lock) {
                         reservations = readReservations();
@@ -281,7 +275,6 @@ public class Database implements DatabaseGuide {
                     writer.println(sb.toString());
 
                 } else if (command.equals("GET_USERS")) {
-                    // GET_USERS
                     StringBuilder sb = new StringBuilder();
                     synchronized (lock) {
                         users = readUsers();
@@ -302,30 +295,25 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    // method creates a new User object given a username and password as input, and
-    // adds the new user object to an ArrayList of type User
+    // Creates a new user and adds it to the list if not duplicate
     public void makeNewUser(String username, String password) {
         synchronized (lock) {
-            users = readUsers(); // Reload to get latest data
-
-            // Check for duplicates to prevent race conditions
+            users = readUsers();
             for (User u : users) {
                 if (u.getUserName().equals(username)) {
-                    return; // User already exists, do nothing
+                    return;
                 }
             }
-
             User newUser = new User(username, password);
             users.add(newUser);
             saveUsers();
         }
     }
 
-    // method gets a User object given a username as input from the users ArrayList
-    // and removes it from the users ArrayList.
+    // Deletes a user by username
     public void deleteUser(String username) {
         synchronized (lock) {
-            users = readUsers(); // Reload
+            users = readUsers();
             for (int i = 0; i < users.size(); i++) {
                 if (users.get(i).getUserName().equals(username)) {
                     users.remove(i);
@@ -336,30 +324,22 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    // method which creates a new Reservation object given day, time, user,
-    // partySize, and table as input and adds the object to the reservations
-    // ArrayList
+    // Creates a new reservation and saves it
     public void createReservation(String day, double time, User user, int partySize, Table table) {
         synchronized (lock) {
-            reservations = readReservations(); // Reload
+            reservations = readReservations();
             Reservation reservation = new Reservation(day, time, user, partySize, table);
             reservations.add(reservation);
             saveReservations();
         }
     }
 
-    // method which deletes a Reservation given day, time, user, partySize, and
-    // table as input and removes the Reservation object from the reservations
-    // ArrayList
+    // Deletes a specific reservation
     public void deleteReservation(Reservation reservation) {
         synchronized (lock) {
-            reservations = readReservations(); // Reload
-
-            // Find the reservation by value since the object instance might be different
-            // after reload
+            reservations = readReservations();
             for (int i = 0; i < reservations.size(); i++) {
                 Reservation r = reservations.get(i);
-                // Match by Day, Time, and Table (Row/Col)
                 if (r.getDay().equals(reservation.getDay()) &&
                         Math.abs(r.getTime() - reservation.getTime()) < 0.001 &&
                         r.getTable().getTableRow() == reservation.getTable().getTableRow() &&
@@ -372,9 +352,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    /**
-     * saves users to file
-     */
+    // Saves the list of users to a file
     public void saveUsers() {
         synchronized (lock) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
@@ -385,9 +363,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    /**
-     * Reads users from file
-     */
+    // Reads the list of users from a file
     public ArrayList<User> readUsers() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
@@ -399,9 +375,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    /**
-     * saves reservations to file
-     */
+    // Saves the list of reservations to a file
     public void saveReservations() {
         synchronized (lock) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(reservationsFile))) {
@@ -412,9 +386,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    /**
-     * Reads reservations from file
-     */
+    // Reads the list of reservations from a file
     public ArrayList<Reservation> readReservations() {
         synchronized (lock) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(reservationsFile))) {
@@ -426,26 +398,23 @@ public class Database implements DatabaseGuide {
         }
     }
 
-    /**
-     * Gets users
-     */
+    // Returns the list of users
     public ArrayList<User> getUsers() {
         synchronized (lock) {
-            users = readUsers(); // Reload
+            users = readUsers();
             return users;
         }
     }
 
-    /**
-     * Gets reservations
-     */
+    // Returns the list of reservations
     public ArrayList<Reservation> getReservations() {
         synchronized (lock) {
-            reservations = readReservations(); // Reload
+            reservations = readReservations();
             return reservations;
         }
     }
 
+    // Converts a time string to a double
     private double convertTimeToDouble(String timeStr) {
         try {
             String[] parts = timeStr.split(" ");
