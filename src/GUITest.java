@@ -32,7 +32,7 @@ public class GUITest extends JFrame {
     private List<JButton> tableIndicators = new ArrayList<>(); // Read-only visual map
 
     public GUITest() {
-        super("Aiden's Pizzeria - Reservation System");
+        super("Boiler Bistro - Reservation System");
         setSize(850, 650); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -59,7 +59,7 @@ public class GUITest extends JFrame {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(OFF_WHITE);
 
-        JLabel title = new JLabel("Aiden's Pizzeria");
+        JLabel title = new JLabel("Boiler Bistro");
         title.setFont(new Font("Serif", Font.BOLD, 48));
         title.setForeground(ITALIAN_RED);
 
