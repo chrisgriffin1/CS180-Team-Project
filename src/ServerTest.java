@@ -19,8 +19,4 @@ public class ServerTest {
         assertNotNull("Server object should not be null after construction", s);
     }
 
-    // We cannot test main() easily because it enters an infinite loop in
-    // Database.run()
-    // and blocks the test thread.
-    // However, we can assert that the class exists and can be instantiated.
 }

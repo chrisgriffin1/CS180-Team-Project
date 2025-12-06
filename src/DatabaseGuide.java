@@ -6,15 +6,23 @@ import java.util.ArrayList;
  */
 
 public interface DatabaseGuide {
+    void run();
+
     void makeNewUser(String username, String password);
 
     void deleteUser(String username);
-    
-    void createReservation (String day, double time, User user, int partySize, Table table);
-    
-    void deleteReservation (Reservation reservation);
+
+    void createReservation(String day, double time, User user, int partySize, Table table);
+
+    void deleteReservation(Reservation reservation);
+
+    void saveUsers();
 
     ArrayList<User> readUsers();
+
+    void saveReservations();
+
+    ArrayList<Reservation> readReservations();
 
     ArrayList<User> getUsers();
 

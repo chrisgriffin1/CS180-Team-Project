@@ -4,6 +4,7 @@
  */
 
 public interface UserGuide {
-    public String getUsername();
+    public String getUserName();
+
     public String getPassword();
 }

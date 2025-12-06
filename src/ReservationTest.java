@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
  * @version November 9, 2025
  */
 
-
 public class ReservationTest {
 
     @Test(timeout = 1000)
@@ -34,7 +33,7 @@ public class ReservationTest {
 
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
     public void testReservationWithNullUser() {
-        Table newTable3 = new Table(3, 4, 2 ,3);
+        Table newTable3 = new Table(3, 4, 2, 3);
         Reservation reservation = new Reservation("Sunday", 18.00, null, 2, newTable3);
 
         assertNotNull(reservation);
@@ -44,7 +43,7 @@ public class ReservationTest {
     @Test(timeout = 1000, expected = IllegalArgumentException.class)
     public void testReservationWithNullDay() {
         User testUser = new User("alice", "alicepass");
-        
+
         Reservation reservation = new Reservation(null, 17.00, testUser, 3, new Table(1, 2, 2, 1));
 
         assertNotNull(reservation);
@@ -57,5 +56,17 @@ public class ReservationTest {
         Reservation reservation = new Reservation("Monday", 21.00, testUser, 0, new Table(1, 3, 2, 3));
         assertNotNull(reservation);
         assertEquals("Party size should be 0", 0, reservation.getPartySize());
+    }
+
+    @Test(timeout = 1000)
+    public void testIsTableOccupied() {
+        User testUser = new User("user", "pass");
+        Table table = new Table(1, 1, 1, 0);
+        Reservation reservation = new Reservation("Monday", 18.00, testUser, 1, table);
+
+        assertFalse("Table should initially be free", reservation.isTableOccupied(table));
+
+        table.getSeats()[0].occupy();
+        assertTrue("Table should be occupied after seat is occupied", reservation.isTableOccupied(table));
     }
 }
