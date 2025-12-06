@@ -25,11 +25,11 @@ public class Client extends JFrame implements ClientGuide {
     private JComboBox<String> tableBox;
     private JPanel grid;
     private List<JButton> buttons = new ArrayList<>();
-    
+
     private JLabel welcomeText;
 
     public Client() {
-        super("Aiden's Pizzeria - Reservation System");
+        super("Boiler bookings");
         setSize(850, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -91,7 +91,7 @@ public class Client extends JFrame implements ClientGuide {
     private JPanel welcome() {
         JPanel p = new JPanel(new GridBagLayout());
 
-        JLabel t = new JLabel("Aiden's Pizzeria");
+        JLabel t = new JLabel("Boiler bookings");
         JLabel s = new JLabel("Authentic Italian Dining");
 
         JButton b1 = new JButton("Login");
