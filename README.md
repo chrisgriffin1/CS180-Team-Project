@@ -387,13 +387,13 @@ Implements `Runnable` interface. Uses `Database` for data management. Communicat
 ### ServerGuide.java
 
 #### Functionality
-Interface for the `Server` class. Currently empty, intended for future server-related methods.
+Interface for the `Server` class. It is empty, since no methods were implemented in `Server.java`.
 
 #### Testing
 No testing
 
 #### Relationships
-Intended to be implemented by `Server.java` (though not currently implemented).
+Intended to be implemented by `Server.java` (however, since `Server.java` does not contain any methods, there is no implementation).
 
 ---
 
@@ -407,15 +407,6 @@ Covers basic functionality:
 
 1. **`testServerConstructorNotNull`**  
    Ensures the Server constructor creates a non-null object.
-
-2. **`testServerImplementsRunnable`**  
-   Verifies that Server implements the Runnable interface.
-
-3. **`testServerCanBeUsedInThread`**  
-   Checks that a Server instance can be used to create a Thread.
-
-4. **`testServerMainDoesNotCrash`**  
-   Ensures the main method runs without exceptions.
 
 #### Relationships
 Tests the `Server` class.
