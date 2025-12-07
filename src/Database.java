@@ -263,8 +263,8 @@ public class Database implements DatabaseGuide {
                     }
 
                 } else if (command.equals("GET_RESERVATIONS")) {
-                    // GET_RESERVATIONS
-                    StringBuilder sb = new StringBuilder();
+                    //using a StringBuilder, a new concept that required external research
+                    StringBuilder sb = new StringBuilder(); 
                     synchronized (lock) {
                         reservations = readReservations();
                         for (Reservation r : reservations) {

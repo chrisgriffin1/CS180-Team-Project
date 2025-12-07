@@ -320,7 +320,7 @@ Tests the `Database` class.
 ### Client.java
 
 #### Functionality
-GUI client application that connects to the server on port 47906. Upon connection, it prompts the user if they have an existing account. If yes, the application presents a login screen to user; if no, the application presents a create user account screen. After successful login, the user is presented with the dashboard, with options to make a reservation, cancel reservation, delete  account, or log out. Making a reservation opens a screen where the user can select the date, time, party size, and table of the reservation. When the reservation is made, the client sends "IS_BOOKED" to the client update the table seating map and also sending "MAKE_RESERVATION" to the server. Choosing to cancel a reservation opens a drop-down menu where the user will be prompted to select which reservation to cancel (if any). This will send "CANCEL_RESERVATION" to the server. If the users has not made a reservation, then an information message will pop up, displaying that the user has no reservations to cancel. If the user selects to delete their account, the client sends "DELETE_USER" to the server and finally if the user selects to log out, the user will return to the Welcome screen and the session is reset. If the initial server connection fails for any reason, the client will display an error message and then close.
+GUI client application that connects to the server on port 47906. Upon connection, it prompts the user if they have an existing account. If yes, the application presents a login screen to user; if no, the application presents a create user account screen. After successful login, the user is presented with the dashboard, with options to make a reservation, cancel reservation, delete  account, or log out. Making a reservation opens a screen where the user can select the date, time, party size, and table of the reservation. When the reservation is made, the client sends `IS_BOOKED` to the client update the table seating map and also sends `MAKE_RESERVATION` to the server. Choosing to cancel a reservation opens a drop-down menu where the user will be prompted to select which reservation to cancel (if any). This will send `CANCEL_RESERVATION` to the server. If the user has not made a reservation, then an information message will pop up, displaying that the user has no reservations to cancel. If the user selects to delete their account, the client sends `DELETE_USER` to the server. Finally if the user selects to log out, the user will return to the Welcome screen and the session is reset. If the initial server connection fails for any reason, the client will display an error message and then close.
 
 #### Testing
 See `ClientTest.java`.
@@ -374,7 +374,7 @@ Tests the `Client` class.
 ### Server.java
 
 #### Functionality
-Server application that listens on port 47906 for client connections. Accepts incoming sockets, reads commands from clients, and interacts with the `Database` to perform operations like creating new users, deleting users, creating/deleting reservations. Commands are expected in formats like "new user;username;password". Responds with success or "Invalid command".
+The server class creates a new instance of the `Database` class and calls `Database().run()`, which loads existing users and reservations, and starts listening for connections and commands from the client on port 47906. The purpose of this server class is to serve as the back-end to the `Client` class, while responding to commands like `MAKE_RESERVATION` and `CANCEL_RESERVATION`. 
 
 #### Testing
 See `ServerTest.java`.
@@ -387,13 +387,13 @@ Implements `Runnable` interface. Uses `Database` for data management. Communicat
 ### ServerGuide.java
 
 #### Functionality
-Interface for the `Server` class. Currently empty, intended for future server-related methods.
+Interface for the `Server` class. It is empty, since no methods were implemented in `Server.java`.
 
 #### Testing
 No testing
 
 #### Relationships
-Intended to be implemented by `Server.java` (though not currently implemented).
+Intended to be implemented by `Server.java` (however, since `Server.java` does not contain any methods, there is no implementation).
 
 ---
 
@@ -407,15 +407,6 @@ Covers basic functionality:
 
 1. **`testServerConstructorNotNull`**  
    Ensures the Server constructor creates a non-null object.
-
-2. **`testServerImplementsRunnable`**  
-   Verifies that Server implements the Runnable interface.
-
-3. **`testServerCanBeUsedInThread`**  
-   Checks that a Server instance can be used to create a Thread.
-
-4. **`testServerMainDoesNotCrash`**  
-   Ensures the main method runs without exceptions.
 
 #### Relationships
 Tests the `Server` class.
