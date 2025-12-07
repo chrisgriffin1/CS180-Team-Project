@@ -21,6 +21,7 @@ public class Database implements DatabaseGuide {
         reservations = readReservations();
     }
 
+    // runs when the thread is created and started
     public void run() {
         ServerSocket serverSocket = null;
         try {
@@ -42,6 +43,7 @@ public class Database implements DatabaseGuide {
         }
     }
 
+    // handles client requests through "cmd;data1;data2;etc"
     private void handleClient(Socket socket) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
@@ -263,8 +265,8 @@ public class Database implements DatabaseGuide {
                     }
 
                 } else if (command.equals("GET_RESERVATIONS")) {
-                    //using a StringBuilder, a new concept that required external research
-                    StringBuilder sb = new StringBuilder(); 
+                    // using a StringBuilder, a new concept that required external research
+                    StringBuilder sb = new StringBuilder();
                     synchronized (lock) {
                         reservations = readReservations();
                         for (Reservation r : reservations) {
